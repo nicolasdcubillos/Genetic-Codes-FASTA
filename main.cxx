@@ -131,6 +131,44 @@ bool ejecutar_comando(char* comando, char* parametros) {
         return validar_cantidad_parametros(parametros, 0);
     }
 
+    if (!strcmp(comando, "listar_secuencias")) {
+        return validar_cantidad_parametros(parametros, 0);
+    }
+
+    if (!strcmp(comando, "histograma")) {
+        return validar_cantidad_parametros(parametros, 1);
+    }
+
+    if (!strcmp(comando, "es_subsecuencia")) {
+        return validar_cantidad_parametros(parametros, 1);
+    }
+
+    if (!strcmp(comando, "enmascarar")) {
+        return validar_cantidad_parametros(parametros, 1);
+    }
+
+    if (!strcmp(comando, "guardar")) {
+        return validar_cantidad_parametros(parametros, 1);
+    }
+
+    if (!strcmp(comando, "salir")) {
+        return validar_cantidad_parametros(parametros, 0);
+    }
+
+    if (!strcmp(comando, "codificar")) {
+        return validar_cantidad_parametros(parametros, 1);
+    }
+
+    if (!strcmp(comando, "decodificar")) {
+        return validar_cantidad_parametros(parametros, 1);
+    }
+    if (!strcmp(comando, "ruta_mas_corta")) {
+        return validar_cantidad_parametros(parametros, 5);
+    }
+    if (!strcmp(comando, "base_remota")) {
+        return validar_cantidad_parametros(parametros, 3);
+    }
+
     return false;
 }
 
