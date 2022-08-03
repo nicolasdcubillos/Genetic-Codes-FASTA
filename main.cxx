@@ -54,15 +54,50 @@ bool ejecutar_comando(char* comando, char* parametros) {
         } else if (!strcmp(parametros, "guardar")) {
 
         } else if (!strcmp(parametros, "codificar")) {
+            cout<<"-> Comando codificar"<<endl;
+            cout<<"-- Formato: codificar nombre_archivo.fabin"<<endl;
+            cout<<"-- Resultado: -Mensaje error = Error en guardar las secuencias cargadas en el archivo indicado"<<endl;
+            cout<<"              -Codificacion Exitosa = Secuencias codificadas y almacenadas en el archivo"<<endl;
+            cout<<"-- Descripcion: Este comando genera el archivo binario con la codificacion Huffman, lo "<<endl;
+            cout<<"                almacena en disco con el nombre indicado en el parametro del comando"<<endl;
 
         } else if (!strcmp(parametros, "decodificar")) {
-
+            cout<<"-> Comando decodificar"<<endl;
+            cout<<"-- Formato: decodificar nombre_archivo.fabin"<<endl;
+            cout<<"-- Resultado: -Mensaje error = Error en cargar las secuencias en el archivo indicado"<<endl;
+            cout<<"              -Decodificacion Exitosa = Secuencias decodificadas desde el archivo indicado"<<endl;
+            cout<<"               y cargadas en memoria"<<endl;
+            cout<<"-- Descripcion: Este comando carga en memoria las secuencias del archivo, si en la sesion ya"<<endl;
+            cout<<"                se han cargado secuencias con este comando, la informacion se sobreescribira"<<endl;
+            
         } else if (!strcmp(parametros, "ruta_mas_corta")) {
+            cout<<"-> Comando ruta_mas_corta"<<endl;
+            cout<<"-- Formato: ruta_mas_corta descripcion_secuencia i j x y"<<endl;
+            cout<<"-- Resultado: -La secuencia no existe = La secuencia cargada en el parametro no existe"<<endl;
+            cout<<"              -Posicion de base origen invalida = La base en la posicion [i ,j ] no existe."<<endl;
+            cout<<"              -Posicion de base destino invalida = La base en la posicion [x ,y ] no existe."<<endl;
+            cout<<"              -La secuencia existe = Se indica la ruta mas corta entre la base origen y destino,"<<endl;
+            cout<<"                indicando cual es y ademas cual es el costo total de la ruta"<<endl;
+            cout<<"-- Descripcion: Este comando muestra la secuencia de vertices del grafo que describe la ruta"<<endl;
+            cout<<"                mas corta entre la base origen y destino, ademas indica cual es el costo total"<<endl;
+            cout<<"                de la ruta, teniendo en cuenta el peso de las conexiones entre las bases"<<endl;
 
         } else if (!strcmp(parametros, "base_remota")) {
+            cout<<"-> Comando base_remota"<<endl;
+            cout<<"-- Formato: base_remota descripcion_secuencia i j"<<endl;
+            cout<<"-- Resultado: -La secuencia no existe = La secuencia cargada en el parametro no existe"<<endl;
+            cout<<"              -Posicion de base invalida = La base en la posicion [i ,j ] no existe."<<endl;
+            cout<<"              -La base existe = Se indica la ruta entre la base indicada y la base remota "<<endl;
+            cout<<"                de la secuencia indicada, ademas indicando el costo total de la ruta"<<endl;
+            cout<<"-- Descripcion: Este comando busca la ubicacion de la misma base mas lejana dentro de la matriz"<<endl;
+            cout<<"                para esto, se muestra por pantalla su ubicacion, la secuencia de vertices que"<<endl;
+            cout<<"                describen la ruta entre esa base origen y base remota, ademas indicando el costo"<<endl;
+            cout<<"                total de la ruta, teniendo en cuenta el peso de las conexiones entre bases"<<endl;
 
         } else if (!strcmp(parametros, "salir")) {
-
+            cout<<"-> Comando salir"<<endl;
+            cout<<"-- Formato: salir"<<endl;
+            cout<<"-- Descripcion: Este comando termina la sesion y sale del programa"<<endl;          
         } else {
             cout << "-> Lista de comandos disponibles para Componente 1: " << endl;
             cout << "   $cargar nombre_archivo" << endl;
