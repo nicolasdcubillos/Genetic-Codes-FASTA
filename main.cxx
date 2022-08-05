@@ -40,18 +40,67 @@ bool ejecutar_comando(char* comando, char* parametros) {
             return true;
         }
         if (!strcmp(parametros, "cargar")) {
+            cout<<"-> Comando cargar"<<endl;
+            cout<<"-- Formato: cargar nombre_archivo"<<endl;
+            cout<<"-- Resultado: -Archivo vacio = No contiene ninguna secuencia"<<endl;
+            cout<<"              -Archivo erroneo = No se encuentra o no se puede leer"<<endl;
+            cout<<"              -Una sola secuencia = Solo hay 1 sola secuencia en el archivo"<<endl;
+            cout<<"              -Varias secuencias = Hay n secuencias cargadas desde el archivo"<<endl;
+            cout<<"-- Descripcion: Este comando carga en memoria los datos del archivo, utilizando adecuadamente"<<endl;
+            cout<<"                las estructuras lineales, si ya se habian cargado secuencias antes, este archivo"<<endl;
+            cout<<"                Sobreescribira las existentes"<<endl;
             
         } else if (!strcmp(parametros, "conteo")) {
+            cout<<"-> Comando conteo"<<endl;
+            cout<<"-- Formato: conteo"<<endl;
+            cout<<"-- Resultado: -No hay secuencias cargadas = No hay secuencias en memoria"<<endl;
+            cout<<"              -Una sola secuencia = Hay 1 secuencia en memoria"<<endl;
+            cout<<"              -Varias secuencias = Hay n secuencias cargadas en memoria"<<endl;
+            cout<<"-- Descripcion: Este comando imprime por pantalla la cantidad de secuencias en memoria"<<endl;
 
         } else if (!strcmp(parametros, "listar_secuencias")) {
+            cout<<"-> Comando listar_secuencias"<<endl;
+            cout<<"-- Formato: listar_secuencias"<<endl;
+            cout<<"-- Resultado: -No hay secuencias cargadas = No contiene ninguna secuencia en memoria"<<endl;
+            cout<<"              -Secuencia completa de archivo no vacio = Se indica la cantidad de bases que tiene"<<endl;
+            cout<<"                                                        cada secuencia"<<endl;
+            cout<<"              -Secuencia incompleta de archivo no vacio = Se indica la cantidad de bases que al menos tiene"<<endl;
+            cout<<"-- Descripcion: Este comando imprime la informacion basica de cada secuencia"<<endl;
 
         } else if (!strcmp(parametros, "histograma")) {
+            cout<<"-> Comando histograma"<<endl;
+            cout<<"-- Formato: histograma descripcion_secuencia "<<endl;
+            cout<<"-- Resultado: -La secuencia no existe = La secuencia indicada es invalida"<<endl;
+            cout<<"              -La secuencia existe = Se imprime por consola cada una de sus frecuencias"<<endl;
+            cout<<"-- Descripcion: Este comando Imprime el histograma de una secuencia. El histograma se definae como el conteo"<<endl;
+            cout<<"                de cada codigo en la secuencia"<<endl;
 
         } else if (!strcmp(parametros, "es_subsecuencia")) {
+            cout<<"-> Comando es_subsecuencia"<<endl;
+            cout<<"-- Formato: es_subsecuencia secuencia"<<endl;
+            cout<<"-- Resultado: -No hay secuencias cargadas = No hay secuencias en memoria"<<endl;
+            cout<<"              -La secuencia no existe = La secuencia dada no existe"<<endl;
+            cout<<"              -Varias secuencias = La secuencia indicada se repite n veces"<<endl;
+            cout<<"-- Descripcion: Este comando deternima si una secuencia dada, existe dentro de las que estan en memoria,"<<endl;
+            cout<<"                si lo esta, tambien defina la cantidad de veces que esta se repite"<<endl;
 
         } else if (!strcmp(parametros, "enmascarar")) {
+            cout<<"-> Comando enmascarar"<<endl;
+            cout<<"-- Formato: enmascarar secuencia"<<endl;
+            cout<<"-- Resultado: -No hay secuencias cargadas = No contiene ninguna secuencia en memoria"<<endl;
+            cout<<"              -No se enmascararon subsecuencias = La secuencia no existe y por ende no se enmascaro"<<endl;
+            cout<<"              -Una subsecuencia enmascarada = Solo hay 1 sola secuencia fue enmascarada"<<endl;
+            cout<<"              -Varias secuencias esmascaradas = Hay n secuencias enmascaradas"<<endl;
+            cout<<"-- Descripcion: Este comando enmascara una secuencia dada por el usuario, los elementos de la subsecuencia"<<endl;
+            cout<<"                se enmascaran, cambiando cada codigo por 'X'."<<endl;
 
         } else if (!strcmp(parametros, "guardar")) {
+            cout<<"-> Comando guardar"<<endl;
+            cout<<"-- Formato: cargar nombre_archivo"<<endl;
+            cout<<"-- Resultado: -No hay secuencias cargadas = No contiene ninguna secuencia en memoria"<<endl;
+            cout<<"              -Escritura exitosa = Indica que las secuencias fueron guardadas en un archivo"<<endl;
+            cout<<"              -Problemas en archivo = Error guardando las secuencias en el archivo"<<endl;
+            cout<<"-- Descripcion: Este comando guarda en un archivo las secuencias que estan en memoria"<<endl;
 
         } else if (!strcmp(parametros, "codificar")) {
             cout<<"-> Comando codificar"<<endl;
