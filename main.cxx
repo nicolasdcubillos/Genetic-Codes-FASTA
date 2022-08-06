@@ -19,29 +19,29 @@ bool ejecutar_comando(char* comando, char* parametros) {
     if (!strcmp(comando, "ayuda")) {
         if (parametros == NULL) {
             cout << " > Lista de comandos disponibles para Componente 1: " << endl;
-            cout << "   $cargar nombre_archivo" << endl;
+            cout << "   $cargar <nombre_archivo>" << endl;
             cout << "   $conteo" << endl;
             cout << "   $listar_secuencias" << endl;
-            cout << "   $histograma descripcion_secuencia" << endl;
-            cout << "   $es_subsecuencia subsecuencia" << endl;
-            cout << "   $enmascarar secuencia" << endl;
-            cout << "   $guardar nombre_archivo" << endl;
+            cout << "   $histograma <descripcion_secuencia>" << endl;
+            cout << "   $es_subsecuencia <subsecuencia>" << endl;
+            cout << "   $enmascarar <secuencia>" << endl;
+            cout << "   $guardar <nombre_archivo>" << endl;
             cout << "   $salir" << endl << endl;
                     
             cout << " > Lista de comandos disponibles para Componente 2: " << endl;
-            cout << "   $codificar nombre_archivo.fabin" << endl;
-            cout << "   $decodificar nombre_archivo.fabin" << endl << endl;
+            cout << "   $codificar <nombre_archivo.fabin>" << endl;
+            cout << "   $decodificar <nombre_archivo.fabin>" << endl << endl;
                     
             cout << " > Lista de comandos disponibles para Componente 3: " << endl;
-            cout << "   $ruta_mas_corta descripcion_secuencia i j x y" << endl;
-            cout << "   $base_remota descripcion_secuencia i j" << endl << endl;
+            cout << "   $ruta_mas_corta <descripcion_secuencia> <i> <j> <x> <y>" << endl;
+            cout << "   $base_remota <descripcion_secuencia> <i> <j>" << endl << endl;
 
             cout << " > $ayuda comando" << endl;
             return true;
         }
         if (!strcmp(parametros, "cargar")) {
             cout << " > Comando cargar" << endl;
-            cout << "-- Formato: cargar nombre_archivo" << endl;
+            cout << "-- Formato: cargar <nombre_archivo>" << endl;
             cout << "-- Resultado: [!] Archivo vacio: No contiene ninguna secuencia" << endl;
             cout << "              [!] Archivo erroneo: No se encuentra o no se puede leer" << endl;
             cout << "              [-] Una sola secuencia: Solo hay una (1) sola secuencia en el archivo" << endl;
@@ -69,7 +69,7 @@ bool ejecutar_comando(char* comando, char* parametros) {
 
         } else if (!strcmp(parametros, "histograma")) {
             cout << " > Comando histograma" << endl;
-            cout << "-- Formato: histograma descripcion_secuencia " << endl;
+            cout << "-- Formato: histograma <descripcion_secuencia>" << endl;
             cout << "-- Resultado: [-] La secuencia no existe: La secuencia indicada es invalida" << endl;
             cout << "              [-] La secuencia existe: Se imprime por consola cada una de sus frecuencias" << endl;
             cout << "-- Descripcion: Este comando imprime el histograma de una secuencia. El histograma se define como el conteo" << endl;
@@ -77,7 +77,7 @@ bool ejecutar_comando(char* comando, char* parametros) {
 
         } else if (!strcmp(parametros, "es_subsecuencia")) {
             cout << " > Comando es_subsecuencia" << endl;
-            cout << "-- Formato: es_subsecuencia secuencia" << endl;
+            cout << "-- Formato: es_subsecuencia <secuencia>" << endl;
             cout << "-- Resultado: [-] No hay secuencias cargadas: No hay secuencias en memoria" << endl;
             cout << "              [-] La secuencia no existe: La secuencia dada no existe" << endl;
             cout << "              [-] Varias secuencias: La secuencia indicada se repite n veces" << endl;
@@ -86,7 +86,7 @@ bool ejecutar_comando(char* comando, char* parametros) {
 
         } else if (!strcmp(parametros, "enmascarar")) {
             cout << " > Comando enmascarar" << endl;
-            cout << "-- Formato: enmascarar secuencia" << endl;
+            cout << "-- Formato: enmascarar <secuencia>" << endl;
             cout << "-- Resultado: [-] No hay secuencias cargadas: No contiene ninguna secuencia en memoria" << endl;
             cout << "              [-] No se enmascararon subsecuencias: La secuencia no existe y por ende no se enmascaro" << endl;
             cout << "              [-] Una subsecuencia enmascarada: Solo hay 1 sola secuencia fue enmascarada" << endl;
@@ -96,7 +96,7 @@ bool ejecutar_comando(char* comando, char* parametros) {
 
         } else if (!strcmp(parametros, "guardar")) {
             cout << " > Comando guardar" << endl;
-            cout << "-- Formato: cargar nombre_archivo" << endl;
+            cout << "-- Formato: cargar <nombre_archivo>" << endl;
             cout << "-- Resultado: [-] No hay secuencias cargadas: No contiene ninguna secuencia en memoria" << endl;
             cout << "              [-] Escritura exitosa: Indica que las secuencias fueron guardadas en un archivo" << endl;
             cout << "              [-] Problemas en archivo: Error guardando las secuencias en el archivo" << endl;
@@ -104,7 +104,7 @@ bool ejecutar_comando(char* comando, char* parametros) {
 
         } else if (!strcmp(parametros, "codificar")) {
             cout << " > Comando codificar" << endl;
-            cout << "-- Formato: codificar nombre_archivo.fabin" << endl;
+            cout << "-- Formato: codificar <nombre_archivo.fabin>" << endl;
             cout << "-- Resultado: [-] Mensaje error: Error en guardar las secuencias cargadas en el archivo indicado" << endl;
             cout << "              [-] Codificacion Exitosa: Secuencias codificadas y almacenadas en el archivo" << endl;
             cout << "-- Descripcion: Este comando genera el archivo binario con la codificacion Huffman, lo " << endl;
@@ -112,7 +112,7 @@ bool ejecutar_comando(char* comando, char* parametros) {
 
         } else if (!strcmp(parametros, "decodificar")) {
             cout << " > Comando decodificar" << endl;
-            cout << "-- Formato: decodificar nombre_archivo.fabin" << endl;
+            cout << "-- Formato: decodificar <nombre_archivo.fabin>" << endl;
             cout << "-- Resultado: [-] Mensaje error: Error en cargar las secuencias en el archivo indicado" << endl;
             cout << "              [-] Decodificacion Exitosa: Secuencias decodificadas desde el archivo indicado" << endl;
             cout << "                  y cargadas en memoria" << endl;
@@ -121,7 +121,7 @@ bool ejecutar_comando(char* comando, char* parametros) {
             
         } else if (!strcmp(parametros, "ruta_mas_corta")) {
             cout << " > Comando ruta_mas_corta" << endl;
-            cout << "-- Formato: ruta_mas_corta descripcion_secuencia i j x y" << endl;
+            cout << "-- Formato: ruta_mas_corta <descripcion_secuencia <i> <j> <x> <y>" << endl;
             cout << "-- Resultado: [-] La secuencia no existe: La secuencia cargada en el parametro no existe" << endl;
             cout << "              [-] Posicion de base origen invalida: La base en la posicion [i ,j ] no existe." << endl;
             cout << "              [-] Posicion de base destino invalida: La base en la posicion [x ,y ] no existe." << endl;
@@ -133,7 +133,7 @@ bool ejecutar_comando(char* comando, char* parametros) {
 
         } else if (!strcmp(parametros, "base_remota")) {
             cout << " > Comando base_remota" << endl;
-            cout << "-- Formato: base_remota descripcion_secuencia i j" << endl;
+            cout << "-- Formato: base_remota <descripcion_secuencia> <i> <j>" << endl;
             cout << "-- Resultado: [-] La secuencia no existe: La secuencia cargada en el parametro no existe" << endl;
             cout << "              [-] Posicion de base invalida: La base en la posicion [i ,j ] no existe." << endl;
             cout << "              [-] La base existe: Se indica la ruta entre la base indicada y la base remota " << endl;
@@ -149,22 +149,22 @@ bool ejecutar_comando(char* comando, char* parametros) {
             cout << "-- Descripcion: Este comando termina la sesion y sale del programa" << endl;          
         } else {
             cout << " > Lista de comandos disponibles para Componente 1: " << endl;
-            cout << "   $cargar nombre_archivo" << endl;
+            cout << "   $cargar <nombre_archivo>" << endl;
             cout << "   $conteo" << endl;
             cout << "   $listar_secuencias" << endl;
-            cout << "   $histograma descripcion_secuencia" << endl;
-            cout << "   $es_subsecuencia subsecuencia" << endl;
-            cout << "   $enmascarar secuencia" << endl;
-            cout << "   $guardar nombre_archivo" << endl;
+            cout << "   $histograma <descripcion_secuencia>" << endl;
+            cout << "   $es_subsecuencia <subsecuencia>" << endl;
+            cout << "   $enmascarar <secuencia>" << endl;
+            cout << "   $guardar <nombre_archivo>" << endl;
             cout << "   $salir" << endl << endl;
                     
             cout << "-> Lista de comandos disponibles para Componente 2: " << endl;
-            cout << "   $codificar nombre_archivo.fabin" << endl;
-            cout << "   $decodificar nombre_archivo.fabin" << endl << endl;
+            cout << "   $codificar <nombre_archivo.fabin>" << endl;
+            cout << "   $decodificar <nombre_archivo.fabin>" << endl << endl;
                     
             cout << "-> Lista de comandos disponibles para Componente 3: " << endl;
-            cout << "   $ruta_mas_corta descripcion_secuencia i j x y" << endl;
-            cout << "   $base_remota descripcion_secuencia i j" << endl << endl;
+            cout << "   $ruta_mas_corta <descripcion_secuencia> <i> <j> <x> <y>" << endl;
+            cout << "   $base_remota <descripcion_secuencia> <i> <j>" << endl << endl;
 
             cout << "-> $ayuda comando" << endl;
             return false;
@@ -223,21 +223,22 @@ bool ejecutar_comando(char* comando, char* parametros) {
 
 void menu () {
     char* linea = new char [MAX_TAM_CHAR];
+    char* comando = new char [MAX_TAM_CHAR];
+    char* parametros = new char [MAX_TAM_CHAR];
     do {
+        cout << "$";
         cin.getline(linea, MAX_TAM_CHAR);
-        if (*linea == '$') {
-            char* parametros = new char [MAX_TAM_CHAR];
-            char* comando = strtok(linea, "$");
-            parametros = strtok(comando, " ");
-            parametros = strtok(NULL, "\n");
-            bool parametros_validos = ejecutar_comando(comando, parametros);
+        char* token = strtok(linea, " ");
+        strcpy(comando, token);
+        token = strtok(NULL, "\n");
+        strcpy(parametros, token != NULL ? token : "");
+        bool parametros_validos = ejecutar_comando(comando, parametros);
 
-            if (parametros_validos)
-                cout << "Comando " << comando << " valido." << endl << endl;
-            else 
-                cout << "Comando invalido.\nEjecute $ayuda o $ayuda [comando] para conocer mas acerca de los comandos." << endl << endl;
+        if (parametros_validos)
+            cout << "Comando " << comando << " valido." << endl << endl;
+        else 
+            cout << "Comando invalido.\nEjecute $ayuda o $ayuda [comando] para conocer mas acerca de los comandos." << endl << endl;
             
-        }
     } while (strcmp(linea, "$salir"));
 }
 
