@@ -3,6 +3,17 @@
 
 #define MAX_TAM_CHAR 256
 
+/*
+    PONTIFICIA UNIVERSIDAD JAVERIANA
+         ESTRUCTURAS DE DATOS
+         PROYECTO - ENTREGA 0
+         5 DE AGOSTO DE 2022
+
+    INTEGRANTES:    NICOLÁS DAVID CUBILLOS CUBILLOS
+                    ANGELLO MATEO JAIMES RINCÓN
+                    ESTEBAN ALBERTO ROJAS MOLINA
+*/
+
 using namespace std;
 
 bool validar_cantidad_parametros(char* parametros, int cantidad) {
