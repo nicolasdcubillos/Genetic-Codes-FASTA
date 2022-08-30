@@ -22,6 +22,18 @@ using namespace std;
 
 Genoma genoma = Genoma ( );
 
+string unicosSecuencia(string secuenciaPrincipal){
+    string secuenciaUnicos;
+
+    for(int i=0;i<secuenciaPrincipal.size();i++){
+        if(secuenciaUnicos.find(secuenciaPrincipal[i]) == std::string::npos){
+            secuenciaUnicos.append(std::string(1, secuenciaPrincipal[i]));
+        }
+    }
+
+    return secuenciaUnicos;
+}
+
 bool validar_cantidad_parametros(char* parametros, int cantidad) {
     int i = 0;
     char* validacion = strtok(parametros, " ");
@@ -269,6 +281,12 @@ bool ejecutar_comando(char* comando, char* parametros) {
 
     if (!strcmp(comando, "listar_secuencias")) {
         if (!validar_cantidad_parametros(parametros, 0)) return false;
+        
+        for (std::list<Secuencia>::iterator ptr = this->secuencias.begin(); ptr != this->secuencias.end(); ptr++)  {
+            // ptr->getDescripcion_secuencia()
+        }
+
+        return true;
     }
 
     if (!strcmp(comando, "histograma")) {
