@@ -3,6 +3,7 @@
 
 #include <string>
 
+using namespace std;
 
 Secuencia::Secuencia () {
     this->descripcion_secuencia = "";
@@ -47,7 +48,15 @@ std::string Secuencia::getCodigo_genetico(){
     return this->codigo_genetico;
 }
 
+std::string Secuencia::unicos_secuencia(){
+    string secuenciaUnicos;
+    string secuenciaPrincipal = this->codigo_genetico;
 
-
+    for(int i = 0; i < secuenciaPrincipal.size(); i++)
+        if (secuenciaUnicos.find(secuenciaPrincipal[i]) == std::string::npos)
+            secuenciaUnicos.append(std::string(1, secuenciaPrincipal[i]));
+        
+    return secuenciaUnicos;
+}
 
 #endif // __SECUENCIA__HXX__

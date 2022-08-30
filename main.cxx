@@ -10,8 +10,8 @@
 /*
     PONTIFICIA UNIVERSIDAD JAVERIANA
          ESTRUCTURAS DE DATOS
-         PROYECTO - ENTREGA 0
-         5 DE AGOSTO DE 2022
+         PROYECTO - ENTREGA 1
+         30 DE AGOSTO DE 2022
 
     INTEGRANTES:    NICOLÁS DAVID CUBILLOS CUBILLOS
                     ANGELLO MATEO JAIMES RINCÓN
@@ -20,19 +20,7 @@
 
 using namespace std;
 
-Genoma genoma = Genoma ( );
-
-string unicosSecuencia(string secuenciaPrincipal){
-    string secuenciaUnicos;
-
-    for(int i=0;i<secuenciaPrincipal.size();i++){
-        if(secuenciaUnicos.find(secuenciaPrincipal[i]) == std::string::npos){
-            secuenciaUnicos.append(std::string(1, secuenciaPrincipal[i]));
-        }
-    }
-
-    return secuenciaUnicos;
-}
+Genoma genoma;
 
 bool validar_cantidad_parametros(char* parametros, int cantidad) {
     int i = 0;
@@ -203,226 +191,48 @@ bool ejecutar_comando(char* comando, char* parametros) {
 
     if (!strcmp(comando, "cargar")) {
         if (!validar_cantidad_parametros(parametros, 1)) return false;
-
-        ifstream lectura; 
-        lectura.open(strcat(parametros, ".fa"));
-        string line, codigo_genetico;
-        std::list <Secuencia> secuencias;
-
-        if (!lectura) { 
-            cerr << parametros << " no se encuentra o no se puede leerse." << endl;
-            return true;
-        }
-
-        if (!sizeof(lectura)) {
-            cerr << parametros << " no contiene ninguna secuencia." << endl;
-            return true;
-        }
-
-        Secuencia secuencia;
-        int indice = 0;
-
-        while (getline(lectura, line)) {
-            if (line[0] == '>') {
-                if (indice++)  { 
-                    secuencia.setCodigo_genetico(codigo_genetico);
-                    secuencias.push_back(secuencia);
-                }
-                secuencia = Secuencia ( );
-                secuencia.setDescripcion_secuencia(line.substr(1, line.size()));
-                secuencia.setCompleta(true);
-                codigo_genetico = "";
-            } else {
-                if (codigo_genetico == "")
-                    secuencia.setJustificacion(line.size());
-
-                codigo_genetico.append(line);
-
-                if (line.find("-") != std::string::npos)
-                    secuencia.setCompleta(false);
-            }
-        }
-
-        if (!indice || secuencias.empty()) {
-            cerr << parametros << " no contiene ninguna secuencia." << endl;
-            return true;
-        }
-        
-        secuencia.setCodigo_genetico(codigo_genetico);
-        secuencias.push_back(secuencia);
-        genoma.setSecuencias(secuencias);
-
-        if (secuencias.size() == 1)
-            cout << "1 secuencia cargada";
-        else 
-            cout << secuencias.size() << " secuencias cargadas";
-        
-        cout <<" correctamente desde el archivo " << parametros << endl;
-        
-        lectura.close();
-
+        genoma.cargar(parametros);
         return true;
     }
 
     if (!strcmp(comando, "conteo")) {
         if (!validar_cantidad_parametros(parametros, 0)) return false;
-
-        if (genoma.getSecuencias().size() == 1)
-            cout << "1 secuencia";
-        else if (genoma.getSecuencias().size() > 1)
-            cout << genoma.getSecuencias().size() << " secuencias";
-        else
-            cout << "No hay secuencias cargadas";
-        
-        cout << " en memoria." << endl;
-
+        genoma.conteo();
         return true;
     }
 
     if (!strcmp(comando, "listar_secuencias")) {
         if (!validar_cantidad_parametros(parametros, 0)) return false;
-
-        list <Secuencia> secuencias = genoma.getSecuencias();
-
-        if(secuencias.size()==0)
-            cout<<"No hay secuencias cargadas en memoria"<<endl;
-
-        for (std::list<Secuencia>::iterator ptr = secuencias.begin(); ptr != secuencias.end(); ptr++) {
-            int cantBases = 0;
-            string basesUnicas = unicosSecuencia(ptr->getCodigo_genetico());
-            cout<<basesUnicas<<endl;
-            cantBases=basesUnicas.size();
-            if(ptr->getCompleta() == true){
-                cout<<"Secuencia "<<ptr->getDescripcion_secuencia()<<" contiene "<<cantBases<<" bases."<<endl;
-            }else{
-                cout<<"Secuencia "<<ptr->getDescripcion_secuencia()<<" contiene al menos "<<cantBases-1<<" bases."<<endl;
-            }       
-        }
-
+        genoma.listar_secuencias();
         return true;
     }
 
     if (!strcmp(comando, "histograma")) {
         if (!validar_cantidad_parametros(parametros, 1)) return false;
-
-        Secuencia secuencia = genoma.buscarSecuencia(string(parametros));
-        
-        if (secuencia.getDescripcion_secuencia() == "") {
-            cerr << "Secuencia inv" << char (160) << "lida." << endl;
-            return true;
-        }
-
-        int base_filtrada, frecuencia, base;
-
-        string bases_filtradas = unicosSecuencia (secuencia.getCodigo_genetico());
-        
-        for (base_filtrada = 0, frecuencia = 0; base_filtrada < bases_filtradas.length(); base_filtrada++) {
-            for (frecuencia = 0, base = 0; base < secuencia.getCodigo_genetico().length(); base++)
-                if (secuencia.getCodigo_genetico()[base] == bases_filtradas[base_filtrada])
-                    frecuencia++;
-            cout << bases_filtradas[base_filtrada] << " : " << frecuencia << endl; 
-        }
-
+        genoma.histograma(parametros);
         return true;
     }
 
     if (!strcmp(comando, "es_subsecuencia")) {
         if (!validar_cantidad_parametros(parametros, 1)) return false;
-        
-        if (!genoma.getSecuencias().size()) {
-            cerr << "No hay secuencias cargadas en memoria.";
-            return true;
-        }
-
-        string secuencia_buscar = string (parametros);
-        list <Secuencia> secuencias = genoma.getSecuencias();
-        int base, coincidencias = 0;
-        
-        for (std::list<Secuencia>::iterator ptr = secuencias.begin(); ptr != secuencias.end(); ptr++) 
-            for (base = 0; base < ptr->getCodigo_genetico().length(); base++) 
-                if (ptr->getCodigo_genetico().substr(base, secuencia_buscar.length()) == secuencia_buscar)
-                    coincidencias++;
-        
-        if (coincidencias)
-            cout << "La secuencia dada se repite " << coincidencias << " veces." << endl;
-        else
-            cout << "La secuencia dada no existe." << endl;
-
+        genoma.es_subsecuencia(parametros);
         return true;
     }
 
     if (!strcmp(comando, "enmascarar")) {
         if (!validar_cantidad_parametros(parametros, 1)) return false;
-
-        if (!genoma.getSecuencias().size()) {
-            cerr << "No hay secuencias cargadas en memoria.";
-            return true;
-        }
-
-        string secuencia_buscar = string (parametros);
-        list <Secuencia> secuencias = genoma.getSecuencias();
-        int base, coincidencias = 0;
-        
-        for (std::list<Secuencia>::iterator ptr = secuencias.begin(); ptr != secuencias.end(); ptr++) {
-            for (base = 0; base < ptr->getCodigo_genetico().length(); base++) {
-                string codigo_genetico = ptr->getCodigo_genetico().substr(base, secuencia_buscar.length());
-                if (codigo_genetico == secuencia_buscar) {
-                    codigo_genetico.replace(base, secuencia_buscar.length(), secuencia_buscar);
-                    coincidencias++;
-                }
-            }
-        }        
-            
-        if (coincidencias == 1)
-            cout << "1 secuencia ha sido enmascarada." << endl;
-        else if (coincidencias > 1)
-            cout << coincidencias << " secuencias han sido enmascaradas." << endl;
-        else 
-            cout << "La secuencia dada no existe, por tanto no se enmascara nada." << endl;
-
+        genoma.enmascarar(parametros);
         return true;
     }
 
     if (!strcmp(comando, "guardar")) {
         if (!validar_cantidad_parametros(parametros, 1)) return false;
-
-        ofstream archivo;
-        string nombreArchivo = string (parametros);
-        nombreArchivo.append(".txt");
-        list <Secuencia> secuencias = genoma.getSecuencias();
-
-        archivo.open(nombreArchivo.c_str(),ios::out);
-
-        if(archivo.fail()){
-            cout<<"Error guardando en "<<nombreArchivo<<endl;
-        }
-
-        for (std::list<Secuencia>::iterator ptr = secuencias.begin(); ptr != secuencias.end(); ptr++) {
-            archivo<<">"<<ptr->getDescripcion_secuencia();
-            string codigoGenetico = ptr->getCodigo_genetico();
-            for(int i=0;i<codigoGenetico.size();i++){
-                if((i%ptr->getJustificacion())==0){
-                    archivo<<endl;
-                }
-                archivo<<codigoGenetico[i];
-            }
-            archivo<<endl;
-
-        }
-
-        if(!archivo.fail()){
-            cout<<"Las secuencias han sido guardadas en "<<nombreArchivo<<endl;
-        }
-
-        archivo.close();
-        
-
-
+        genoma.guardar(parametros);
         return true;
     }
 
     if (!strcmp(comando, "salir")) {
-        if (!validar_cantidad_parametros(parametros, 0)) return false;
+        return validar_cantidad_parametros(parametros, 0);
     }
 
     if (!strcmp(comando, "codificar")) {
@@ -432,9 +242,11 @@ bool ejecutar_comando(char* comando, char* parametros) {
     if (!strcmp(comando, "decodificar")) {
         return validar_cantidad_parametros(parametros, 1);
     }
+
     if (!strcmp(comando, "ruta_mas_corta")) {
         return validar_cantidad_parametros(parametros, 5);
     }
+
     if (!strcmp(comando, "base_remota")) {
         return validar_cantidad_parametros(parametros, 3);
     }

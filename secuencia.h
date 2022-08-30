@@ -13,6 +13,7 @@ class Secuencia {
     public:
         Secuencia();
         virtual ~Secuencia(); 
+        
         void setDescripcion_secuencia(std::string);
         std::string getDescripcion_secuencia();
         void setCompleta(bool);
@@ -21,6 +22,8 @@ class Secuencia {
         unsigned short getJustificacion();
         void setCodigo_genetico(std::string);
         std::string getCodigo_genetico();
+
+        std::string unicos_secuencia ();
 };
 
 #include "secuencia.hxx"

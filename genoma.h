@@ -17,6 +17,13 @@ class Genoma {
         std::list<Secuencia> getSecuencias();
 
         Secuencia buscarSecuencia(std::string);
+        void cargar (char*);
+        void conteo ();
+        void listar_secuencias ();
+        void histograma(char*);
+        void es_subsecuencia(char*);
+        void enmascarar(char*);
+        void guardar(char*);
 };
 
 #include "genoma.hxx"
