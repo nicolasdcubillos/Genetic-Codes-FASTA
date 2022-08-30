@@ -284,6 +284,23 @@ bool ejecutar_comando(char* comando, char* parametros) {
     if (!strcmp(comando, "listar_secuencias")) {
         if (!validar_cantidad_parametros(parametros, 0)) return false;
 
+        list <Secuencia> secuencias = genoma.getSecuencias();
+
+        if(secuencias.size()==0)
+            cout<<"No hay secuencias cargadas en memoria"<<endl;
+
+        for (std::list<Secuencia>::iterator ptr = secuencias.begin(); ptr != secuencias.end(); ptr++) {
+            int cantBases = 0;
+            string basesUnicas = unicosSecuencia(ptr->getCodigo_genetico());
+            cout<<basesUnicas<<endl;
+            cantBases=basesUnicas.size();
+            if(ptr->getCompleta() == true){
+                cout<<"Secuencia "<<ptr->getDescripcion_secuencia()<<" contiene "<<cantBases<<" bases."<<endl;
+            }else{
+                cout<<"Secuencia "<<ptr->getDescripcion_secuencia()<<" contiene al menos "<<cantBases-1<<" bases."<<endl;
+            }       
+        }
+
         return true;
     }
 
