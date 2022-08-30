@@ -5,8 +5,12 @@
 
 
 Secuencia::Secuencia(){
-
+    this->descripcion_secuencia = "";
+    this->codigo_genetico = "";
+    this->completa = false;
+    this->justificacion = 0;
 }
+
 Secuencia::~Secuencia(){
 
 }

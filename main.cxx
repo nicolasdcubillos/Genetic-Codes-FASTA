@@ -227,7 +227,7 @@ bool ejecutar_comando(char* comando, char* parametros) {
 
                 codigo_genetico.append(line);
 
-                if (line.find("-"))
+                if (line.find("-") != std::string::npos)
                     secuencia.setCompleta(false);
             }
         }
@@ -248,6 +248,7 @@ bool ejecutar_comando(char* comando, char* parametros) {
         cout <<" correctamente desde el archivo" << parametros << endl;
         
         lectura.close();
+
         return true;
     }
 
@@ -261,7 +262,7 @@ bool ejecutar_comando(char* comando, char* parametros) {
         else
             cout << "No hay secuencias cargadas";
         
-        cout <<" en memoria." << endl;
+        cout << " en memoria." << endl;
 
         return true;
     }
@@ -276,6 +277,13 @@ bool ejecutar_comando(char* comando, char* parametros) {
 
     if (!strcmp(comando, "es_subsecuencia")) {
         if (!validar_cantidad_parametros(parametros, 1)) return false;
+        Secuencia secuencia = genoma.buscarSecuencia(std::string(parametros));
+        if (secuencia.getDescripcion_secuencia() != "") {
+            
+        } else {
+            // No se encontró.
+        }
+        return true;
     }
 
     if (!strcmp(comando, "enmascarar")) {
@@ -287,7 +295,7 @@ bool ejecutar_comando(char* comando, char* parametros) {
     }
 
     if (!strcmp(comando, "salir")) {
-        if (!return validar_cantidad_parametros(parametros, 0)) return false;
+        if (!validar_cantidad_parametros(parametros, 0)) return false;
     }
 
     if (!strcmp(comando, "codificar")) {

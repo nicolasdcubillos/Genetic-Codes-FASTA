@@ -12,8 +12,11 @@ class Genoma {
     public:
         Genoma();
         virtual ~Genoma(); 
+
         void setSecuencias(std::list<Secuencia>);
         std::list<Secuencia> getSecuencias();
+
+        Secuencia buscarSecuencia(std::string);
 };
 
 #include "genoma.hxx"
