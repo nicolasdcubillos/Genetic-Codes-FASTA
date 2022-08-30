@@ -202,13 +202,14 @@ bool ejecutar_comando(char* comando, char* parametros) {
             return true;
         }
 
-        if (lectura.eof()) {
+        if (!sizeof(lectura)) {
             cerr << parametros << " no contiene ninguna secuencia." << endl;
             return true;
         }
 
         Secuencia secuencia;
         int indice = 0;
+
         while (getline(lectura, line)) {
             string codigo_genetico;
             if (line[0] == '>') {
@@ -218,17 +219,25 @@ bool ejecutar_comando(char* comando, char* parametros) {
                 }
                 secuencia = Secuencia ( );
                 secuencia.setDescripcion_secuencia(line.substr(1, line.size()));
+                secuencia.setCompleta(true);
                 codigo_genetico = "";
             } else {
                 if (codigo_genetico == "")
                     secuencia.setJustificacion(line.size());
+
                 codigo_genetico.append(line);
 
                 if (line.find("-"))
-                    secuencia.setCompleta(true);
+                    secuencia.setCompleta(false);
             }
         }
 
+        if (!indice || secuencias.empty()) {
+            cerr << parametros << " no contiene ninguna secuencia." << endl;
+            return true;
+        }
+        
+        secuencias.push_back(secuencia);
         genoma.setSecuencias(secuencias);
 
         if (secuencias.size() == 1)
@@ -243,31 +252,42 @@ bool ejecutar_comando(char* comando, char* parametros) {
     }
 
     if (!strcmp(comando, "conteo")) {
-        return validar_cantidad_parametros(parametros, 0);
+        if (!validar_cantidad_parametros(parametros, 0)) return false;
+
+        if (genoma.getSecuencias().size() == 1)
+            cout << "1 secuencia";
+        else if (genoma.getSecuencias().size() > 1)
+            cout << genoma.getSecuencias().size() << " secuencias";
+        else
+            cout << "No hay secuencias cargadas";
+        
+        cout <<" en memoria." << endl;
+
+        return true;
     }
 
     if (!strcmp(comando, "listar_secuencias")) {
-        return validar_cantidad_parametros(parametros, 0);
+        if (!validar_cantidad_parametros(parametros, 0)) return false;
     }
 
     if (!strcmp(comando, "histograma")) {
-        return validar_cantidad_parametros(parametros, 1);
+        if (!validar_cantidad_parametros(parametros, 1)) return false;
     }
 
     if (!strcmp(comando, "es_subsecuencia")) {
-        return validar_cantidad_parametros(parametros, 1);
+        if (!validar_cantidad_parametros(parametros, 1)) return false;
     }
 
     if (!strcmp(comando, "enmascarar")) {
-        return validar_cantidad_parametros(parametros, 1);
+        if (!validar_cantidad_parametros(parametros, 1)) return false;
     }
 
     if (!strcmp(comando, "guardar")) {
-        return validar_cantidad_parametros(parametros, 1);
+        if (!validar_cantidad_parametros(parametros, 1)) return false;
     }
 
     if (!strcmp(comando, "salir")) {
-        return validar_cantidad_parametros(parametros, 0);
+        if (!return validar_cantidad_parametros(parametros, 0)) return false;
     }
 
     if (!strcmp(comando, "codificar")) {
