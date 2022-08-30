@@ -27,7 +27,7 @@ string unicosSecuencia(string secuenciaPrincipal){
 
     for(int i=0;i<secuenciaPrincipal.size();i++){
         if(secuenciaUnicos.find(secuenciaPrincipal[i]) == std::string::npos){
-            secuenciaUnicos.append(secuenciaPrincipal[i]);
+            secuenciaUnicos.append(std::string(1, secuenciaPrincipal[i]));
         }
     }
 
@@ -280,6 +280,13 @@ bool ejecutar_comando(char* comando, char* parametros) {
 
     if (!strcmp(comando, "listar_secuencias")) {
         if (!validar_cantidad_parametros(parametros, 0)) return false;
+
+        
+        
+        cout<<unicosSecuencia(prueba);
+
+        return true;
+
     }
 
     if (!strcmp(comando, "histograma")) {
@@ -299,7 +306,7 @@ bool ejecutar_comando(char* comando, char* parametros) {
     }
 
     if (!strcmp(comando, "salir")) {
-        if (!return validar_cantidad_parametros(parametros, 0)) return false;
+        if ( validar_cantidad_parametros(parametros, 0)) return false;
     }
 
     if (!strcmp(comando, "codificar")) {
