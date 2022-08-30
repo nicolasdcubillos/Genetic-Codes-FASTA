@@ -240,8 +240,6 @@ bool ejecutar_comando(char* comando, char* parametros) {
 
                 if (line.find("-") != std::string::npos)
                     secuencia.setCompleta(false);
-                
-               
             }
         }
 
@@ -306,6 +304,26 @@ bool ejecutar_comando(char* comando, char* parametros) {
 
     if (!strcmp(comando, "histograma")) {
         if (!validar_cantidad_parametros(parametros, 1)) return false;
+
+        Secuencia secuencia = genoma.buscarSecuencia(string(parametros));
+        
+        if (secuencia.getDescripcion_secuencia() == "") {
+            cerr << "Secuencia inv" << char (160) << "lida." << endl;
+            return true;
+        }
+
+        int base_filtrada, frecuencia, base;
+
+        string bases_filtradas = unicosSecuencia (secuencia.getCodigo_genetico());
+        
+        for (base_filtrada = 0, frecuencia = 0; base_filtrada < bases_filtradas.length(); base_filtrada++) {
+            for (frecuencia = 0, base = 0; base < secuencia.getCodigo_genetico().length(); base++)
+                if (secuencia.getCodigo_genetico()[base] == bases_filtradas[base_filtrada])
+                    frecuencia++;
+            cout << bases_filtradas[base_filtrada] << " : " << frecuencia << endl; 
+        }
+
+        return true;
     }
 
     if (!strcmp(comando, "es_subsecuencia")) {
@@ -335,6 +353,34 @@ bool ejecutar_comando(char* comando, char* parametros) {
 
     if (!strcmp(comando, "enmascarar")) {
         if (!validar_cantidad_parametros(parametros, 1)) return false;
+
+        if (!genoma.getSecuencias().size()) {
+            cerr << "No hay secuencias cargadas en memoria.";
+            return true;
+        }
+
+        string secuencia_buscar = string (parametros);
+        list <Secuencia> secuencias = genoma.getSecuencias();
+        int base, coincidencias = 0;
+        
+        for (std::list<Secuencia>::iterator ptr = secuencias.begin(); ptr != secuencias.end(); ptr++) {
+            for (base = 0; base < ptr->getCodigo_genetico().length(); base++) {
+                string codigo_genetico = ptr->getCodigo_genetico().substr(base, secuencia_buscar.length());
+                if (codigo_genetico == secuencia_buscar) {
+                    codigo_genetico.replace(base, secuencia_buscar.length(), secuencia_buscar);
+                    coincidencias++;
+                }
+            }
+        }        
+            
+        if (coincidencias == 1)
+            cout << "1 secuencia ha sido enmascarada." << endl;
+        else if (coincidencias > 1)
+            cout << coincidencias << " secuencias han sido enmascaradas." << endl;
+        else 
+            cout << "La secuencia dada no existe, por tanto no se enmascara nada." << endl;
+
+        return true;
     }
 
     if (!strcmp(comando, "guardar")) {
