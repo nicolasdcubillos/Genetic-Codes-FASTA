@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string.h>
+#include "secuencia.h"
 
 #define MAX_TAM_CHAR 256
 
@@ -256,3 +257,4 @@ void menu () {
 int main () {
     menu();
 }
+
