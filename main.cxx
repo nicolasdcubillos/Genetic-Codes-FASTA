@@ -259,7 +259,7 @@ bool ejecutar_comando(char* comando, char* parametros) {
         else 
             cout << secuencias.size() << " secuencias cargadas";
         
-        cout <<" correctamente desde el archivo" << parametros << endl;
+        cout <<" correctamente desde el archivo " << parametros << endl;
         
         lectura.close();
 
@@ -310,12 +310,25 @@ bool ejecutar_comando(char* comando, char* parametros) {
 
     if (!strcmp(comando, "es_subsecuencia")) {
         if (!validar_cantidad_parametros(parametros, 1)) return false;
-
-        list <Secuencia> secuencias = genoma.getSecuencias();
         
-        for (std::list<Secuencia>::iterator ptr = secuencias.begin(); ptr != secuencias.end(); ptr++) {
-            // ...
+        if (!genoma.getSecuencias().size()) {
+            cerr << "No hay secuencias cargadas en memoria.";
+            return true;
         }
+
+        string secuencia_buscar = string (parametros);
+        list <Secuencia> secuencias = genoma.getSecuencias();
+        int base, coincidencias = 0;
+        
+        for (std::list<Secuencia>::iterator ptr = secuencias.begin(); ptr != secuencias.end(); ptr++) 
+            for (base = 0; base < ptr->getCodigo_genetico().length(); base++) 
+                if (ptr->getCodigo_genetico().substr(base, secuencia_buscar.length()) == secuencia_buscar)
+                    coincidencias++;
+        
+        if (coincidencias)
+            cout << "La secuencia dada se repite " << coincidencias << " veces." << endl;
+        else
+            cout << "La secuencia dada no existe." << endl;
 
         return true;
     }
@@ -326,6 +339,40 @@ bool ejecutar_comando(char* comando, char* parametros) {
 
     if (!strcmp(comando, "guardar")) {
         if (!validar_cantidad_parametros(parametros, 1)) return false;
+
+        ofstream archivo;
+        string nombreArchivo = string (parametros);
+        nombreArchivo.append(".txt");
+        list <Secuencia> secuencias = genoma.getSecuencias();
+
+        archivo.open(nombreArchivo.c_str(),ios::out);
+
+        if(archivo.fail()){
+            cout<<"Error guardando en "<<nombreArchivo<<endl;
+        }
+
+        for (std::list<Secuencia>::iterator ptr = secuencias.begin(); ptr != secuencias.end(); ptr++) {
+            archivo<<">"<<ptr->getDescripcion_secuencia();
+            string codigoGenetico = ptr->getCodigo_genetico();
+            for(int i=0;i<codigoGenetico.size();i++){
+                if((i%ptr->getJustificacion())==0){
+                    archivo<<endl;
+                }
+                archivo<<codigoGenetico[i];
+            }
+            archivo<<endl;
+
+        }
+
+        if(!archivo.fail()){
+            cout<<"Las secuencias han sido guardadas en "<<nombreArchivo<<endl;
+        }
+
+        archivo.close();
+        
+
+
+        return true;
     }
 
     if (!strcmp(comando, "salir")) {
