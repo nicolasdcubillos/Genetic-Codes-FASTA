@@ -385,6 +385,40 @@ bool ejecutar_comando(char* comando, char* parametros) {
 
     if (!strcmp(comando, "guardar")) {
         if (!validar_cantidad_parametros(parametros, 1)) return false;
+
+        ofstream archivo;
+        string nombreArchivo = string (parametros);
+        nombreArchivo.append(".txt");
+        list <Secuencia> secuencias = genoma.getSecuencias();
+
+        archivo.open(nombreArchivo.c_str(),ios::out);
+
+        if(archivo.fail()){
+            cout<<"Error guardando en "<<nombreArchivo<<endl;
+        }
+
+        for (std::list<Secuencia>::iterator ptr = secuencias.begin(); ptr != secuencias.end(); ptr++) {
+            archivo<<">"<<ptr->getDescripcion_secuencia();
+            string codigoGenetico = ptr->getCodigo_genetico();
+            for(int i=0;i<codigoGenetico.size();i++){
+                if((i%ptr->getJustificacion())==0){
+                    archivo<<endl;
+                }
+                archivo<<codigoGenetico[i];
+            }
+            archivo<<endl;
+
+        }
+
+        if(!archivo.fail()){
+            cout<<"Las secuencias han sido guardadas en "<<nombreArchivo<<endl;
+        }
+
+        archivo.close();
+        
+
+
+        return true;
     }
 
     if (!strcmp(comando, "salir")) {
