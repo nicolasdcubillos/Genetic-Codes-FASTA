@@ -4,26 +4,26 @@
 #include <string>
 
 
-Secuencia::Secuencia(){
+Secuencia::Secuencia () {
     this->descripcion_secuencia = "";
     this->codigo_genetico = "";
     this->completa = false;
     this->justificacion = 0;
 }
 
-Secuencia::~Secuencia(){
+Secuencia::~Secuencia () {
 
 }
 
-void Secuencia::setDescripcion_secuencia(std::string descripcion_secuencia){
+void Secuencia::setDescripcion_secuencia (std::string descripcion_secuencia) {
     this->descripcion_secuencia = descripcion_secuencia;
 }
 
-void Secuencia::setCompleta(bool completa){
+void Secuencia::setCompleta (bool completa) {
     this->completa = completa;
 }
 
-void Secuencia::setJustificacion(unsigned short justificacion){
+void Secuencia::setJustificacion (unsigned short justificacion) {
     this->justificacion = justificacion;
 }
 

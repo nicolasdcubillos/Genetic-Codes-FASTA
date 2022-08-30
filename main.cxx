@@ -206,7 +206,7 @@ bool ejecutar_comando(char* comando, char* parametros) {
 
         ifstream lectura; 
         lectura.open(strcat(parametros, ".fa"));
-        string line;
+        string line, codigo_genetico;
         std::list <Secuencia> secuencias;
 
         if (!lectura) { 
@@ -223,9 +223,8 @@ bool ejecutar_comando(char* comando, char* parametros) {
         int indice = 0;
 
         while (getline(lectura, line)) {
-            string codigo_genetico;
             if (line[0] == '>') {
-                if (indice++)  {
+                if (indice++)  { 
                     secuencia.setCodigo_genetico(codigo_genetico);
                     secuencias.push_back(secuencia);
                 }
@@ -241,6 +240,8 @@ bool ejecutar_comando(char* comando, char* parametros) {
 
                 if (line.find("-") != std::string::npos)
                     secuencia.setCompleta(false);
+                
+               
             }
         }
 
@@ -249,6 +250,7 @@ bool ejecutar_comando(char* comando, char* parametros) {
             return true;
         }
         
+        secuencia.setCodigo_genetico(codigo_genetico);
         secuencias.push_back(secuencia);
         genoma.setSecuencias(secuencias);
 
@@ -281,10 +283,6 @@ bool ejecutar_comando(char* comando, char* parametros) {
 
     if (!strcmp(comando, "listar_secuencias")) {
         if (!validar_cantidad_parametros(parametros, 0)) return false;
-        
-        for (std::list<Secuencia>::iterator ptr = this->secuencias.begin(); ptr != this->secuencias.end(); ptr++)  {
-            // ptr->getDescripcion_secuencia()
-        }
 
         return true;
     }
@@ -295,12 +293,13 @@ bool ejecutar_comando(char* comando, char* parametros) {
 
     if (!strcmp(comando, "es_subsecuencia")) {
         if (!validar_cantidad_parametros(parametros, 1)) return false;
-        Secuencia secuencia = genoma.buscarSecuencia(std::string(parametros));
-        if (secuencia.getDescripcion_secuencia() != "") {
-            
-        } else {
-            // No se encontró.
+
+        list <Secuencia> secuencias = genoma.getSecuencias();
+        
+        for (std::list<Secuencia>::iterator ptr = secuencias.begin(); ptr != secuencias.end(); ptr++) {
+            // ...
         }
+
         return true;
     }
 
