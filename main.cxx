@@ -1,6 +1,9 @@
 #include <iostream>
+#include <fstream>
 #include <string.h>
+#include <list>
 #include "secuencia.h"
+#include "genoma.h"
 
 #define MAX_TAM_CHAR 256
 
@@ -16,6 +19,8 @@
 */
 
 using namespace std;
+
+Genoma genoma = Genoma ( );
 
 bool validar_cantidad_parametros(char* parametros, int cantidad) {
     int i = 0;
@@ -185,7 +190,56 @@ bool ejecutar_comando(char* comando, char* parametros) {
     }
 
     if (!strcmp(comando, "cargar")) {
-        return validar_cantidad_parametros(parametros, 1);
+        if (!validar_cantidad_parametros(parametros, 1)) return false;
+
+        ifstream lectura; 
+        lectura.open(strcat(parametros, ".fa"));
+        string line;
+        std::list <Secuencia> secuencias;
+
+        if (!lectura) { 
+            cerr << parametros << " no se encuentra o no se puede leerse." << endl;
+            return true;
+        }
+
+        if (lectura.eof()) {
+            cerr << parametros << " no contiene ninguna secuencia." << endl;
+            return true;
+        }
+
+        Secuencia secuencia;
+        int indice = 0;
+        while (getline(lectura, line)) {
+            string codigo_genetico;
+            if (line[0] == '>') {
+                if (indice++)  {
+                    secuencia.setCodigo_genetico(codigo_genetico);
+                    secuencias.push_back(secuencia);
+                }
+                secuencia = Secuencia ( );
+                secuencia.setDescripcion_secuencia(line.substr(1, line.size()));
+                codigo_genetico = "";
+            } else {
+                if (codigo_genetico == "")
+                    secuencia.setJustificacion(line.size());
+                codigo_genetico.append(line);
+
+                if (line.find("-"))
+                    secuencia.setCompleta(true);
+            }
+        }
+
+        genoma.setSecuencias(secuencias);
+
+        if (secuencias.size() == 1)
+            cout << "1 secuencia cargada";
+        else 
+            cout << secuencias.size() << " secuencias cargadas";
+        
+        cout <<" correctamente desde el archivo" << parametros << endl;
+        
+        lectura.close();
+        return true;
     }
 
     if (!strcmp(comando, "conteo")) {
@@ -246,12 +300,10 @@ void menu () {
         strcpy(parametros, token != NULL ? token : "");
         bool parametros_validos = ejecutar_comando(comando, parametros);
 
-        if (parametros_validos)
-            cout << "Comando " << comando << " valido." << endl << endl;
-        else 
+        if (!parametros_validos)
             cout << "Comando invalido.\nEjecute $ayuda o $ayuda [comando] para conocer mas acerca de los comandos." << endl << endl;
             
-    } while (strcmp(linea, "$salir"));
+    } while (strcmp(linea, "salir"));
 }
 
 int main () {
