@@ -4,6 +4,7 @@
 #include <string>
 #include <list>
 #include <iterator>
+#include <vector>
 
 using namespace std;
 
@@ -35,7 +36,7 @@ Secuencia Genoma::buscarSecuencia (std::string descripcion_secuencia) {
 
 void Genoma::cargar (char* nombre_archivo) {
     ifstream lectura; 
-    lectura.open(strcat(nombre_archivo, ".fa"));
+    lectura.open(nombre_archivo);
     string line, codigo_genetico;
     std::list <Secuencia> secuencias;
 
@@ -131,13 +132,13 @@ void Genoma::histograma (char* descripcion_secuencia) {
     int base_filtrada, frecuencia, base;
 
     string bases_filtradas = secuencia.unicos_secuencia();
-        
-    for (base_filtrada = 0, frecuencia = 0; base_filtrada < bases_filtradas.length(); base_filtrada++) {
-        for (frecuencia = 0, base = 0; base < secuencia.getCodigo_genetico().length(); base++)
-            if (secuencia.getCodigo_genetico()[base] == bases_filtradas[base_filtrada])
-                frecuencia++;
-        cout << bases_filtradas[base_filtrada] << " : " << frecuencia << endl; 
-    }
+    std::vector <int> frecuencias (bases_filtradas.size(), 0);
+    
+    for (base = 0; base < secuencia.getCodigo_genetico().size(); base++)
+        frecuencias[bases_filtradas.find(secuencia.getCodigo_genetico()[base])]++;
+
+    for (base = 0; base < frecuencias.size(); base++)
+        cout << bases_filtradas[base] << " : " << frecuencias[base] << endl;
 }
 
 void Genoma::es_subsecuencia (char* secuencia) {
@@ -194,7 +195,6 @@ void Genoma::guardar (char* nombre_archivo) {
     
     ofstream archivo;
     string nombreArchivo = string (nombre_archivo);
-    nombreArchivo.append(".txt");
 
     archivo.open(nombreArchivo.c_str(),ios::out);
 
