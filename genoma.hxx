@@ -149,13 +149,17 @@ void Genoma::es_subsecuencia (char* secuencia) {
     }
 
     string secuencia_buscar = string (secuencia);
-    int base, coincidencias = 0;
-        
-    for (std::list<Secuencia>::iterator ptr = secuencias.begin(); ptr != secuencias.end(); ptr++) 
-        for (base = 0; base < ptr->getCodigo_genetico().length(); base++) 
-            if (ptr->getCodigo_genetico().substr(base, secuencia_buscar.length()) == secuencia_buscar)
-                coincidencias++;
-        
+    string codigo_genetico;
+    int base, coincidencias = 0, posicion = secuencia_buscar.length() * -1;
+
+    for (std::list<Secuencia>::iterator ptr = secuencias.begin(); ptr != secuencias.end(); ptr++) {
+        codigo_genetico = ptr->getCodigo_genetico();
+        do {
+            posicion = codigo_genetico.find(secuencia_buscar, posicion + secuencia_buscar.length());
+            if (posicion != -1) coincidencias++;
+        } while (posicion != -1);
+    }
+
     if (coincidencias)
         cout << "La secuencia dada se repite " << coincidencias << " veces." << endl;
     else
@@ -170,18 +174,20 @@ void Genoma::enmascarar (char* secuencia) {
     }
 
     string secuencia_buscar = string (secuencia);
-    int base, coincidencias = 0;
+    string codigo_genetico;
+    int base, coincidencias = 0, posicion = secuencia_buscar.length() * -1;
 
     for (std::list<Secuencia>::iterator ptr = secuencias.begin(); ptr != secuencias.end(); ptr++) {
-        string codigo_genetico = ptr->getCodigo_genetico();
-        for (base = 0; base < codigo_genetico.length(); base++) {
-            if (ptr->getCodigo_genetico().substr(base, secuencia_buscar.length()) == secuencia_buscar) {
-                codigo_genetico.replace(base, secuencia_buscar.length(), string(secuencia_buscar.length(), 'X'));
+        codigo_genetico = ptr->getCodigo_genetico();
+        do {
+            posicion = codigo_genetico.find(secuencia_buscar, posicion + secuencia_buscar.length());
+            if (posicion != -1) {
+                codigo_genetico.replace(posicion, secuencia_buscar.length(), string(secuencia_buscar.length(), 'X'));
                 coincidencias++;
             }
-        }
+        } while (posicion != -1);
         ptr->setCodigo_genetico(codigo_genetico);
-    }        
+    }
             
     if (coincidencias == 1)
         cout << "1 secuencia ha sido enmascarada." << endl;
