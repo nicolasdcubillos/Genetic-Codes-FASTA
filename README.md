@@ -13,3 +13,7 @@ g++ -std=c++11 -o main main.cxx
 ```bash
 ./main
 ```
+
+## Licencia
+
+[MIT](https://choosealicense.com/licenses/mit/)
