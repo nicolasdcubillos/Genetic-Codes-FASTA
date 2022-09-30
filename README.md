@@ -1,6 +1,6 @@
-# Genetic-Code-FASTA
+# Genetic-Codes-FASTA
 
-Procesador de códigos genéticos FASTA, haciendo uso de diferentes Estructuras de Datos.
+Procesador de códigos genéticos en archivos FASTA (.fa) haciendo uso de diferentes Estructuras de Datos.
 
 ## Compilación
 
