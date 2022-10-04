@@ -3,6 +3,7 @@
 
 #include <string>
 #include <list>
+#include <vector>
 #include "secuencia.h"
 
 class Genoma {
@@ -20,10 +21,14 @@ class Genoma {
         void cargar (char*);
         void conteo ();
         void listar_secuencias ();
-        void histograma(char*);
-        void es_subsecuencia(char*);
+        std::vector<string> histograma(char*);
+        std::vector<string> histogramaGeneral ();
+        int es_subsecuencia(char*);
         void enmascarar(char*);
         void guardar(char*);
+        void codificar(char*);
+        void decodificar(char*);
+        std::string unicos_secuencia();
 };
 
 #include "genoma.hxx"

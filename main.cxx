@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string.h>
 #include <list>
+#include <vector>
 #include "secuencia.h"
 #include "genoma.h"
 
@@ -29,7 +30,7 @@ bool validar_cantidad_parametros(char* parametros, int cantidad) {
         validacion = strtok(NULL, " ");
         i++;
     }
-    return i == cantidad ? true : false;
+    return i == cantidad;
 }
 
 bool ejecutar_comando(char* comando, char* parametros) {
@@ -209,13 +210,30 @@ bool ejecutar_comando(char* comando, char* parametros) {
 
     if (!strcmp(comando, "histograma")) {
         if (!validar_cantidad_parametros(parametros, 1)) return false;
-        genoma.histograma(parametros);
+        vector <string> histograma = genoma.histograma(parametros);
+        int base;
+        if (histograma.size() > 0) {
+            for (base = 0; base < histograma.size(); base += 2) 
+                cout << histograma[base] << " : " << histograma[base + 1] << endl;
+        }
+        else 
+            cerr << "Secuencia inv" << char (160) << "lida." << endl;
+
         return true;
     }
 
     if (!strcmp(comando, "es_subsecuencia")) {
         if (!validar_cantidad_parametros(parametros, 1)) return false;
-        genoma.es_subsecuencia(parametros);
+
+        int coincidencias = genoma.es_subsecuencia(parametros);
+
+        if (coincidencias > 0)
+            cout << "La secuencia dada se repite " << coincidencias << " veces." << endl;
+        else if (coincidencias == -1)
+            cerr << "No hay secuencias cargadas en memoria." << endl;
+        else
+            cerr << "La secuencia dada no existe." << endl;
+
         return true;
     }
 
@@ -236,7 +254,9 @@ bool ejecutar_comando(char* comando, char* parametros) {
     }
 
     if (!strcmp(comando, "codificar")) {
-        return validar_cantidad_parametros(parametros, 1);
+        if (!validar_cantidad_parametros(parametros, 1)) return false;
+        genoma.codificar(parametros);
+        return true;
     }
 
     if (!strcmp(comando, "decodificar")) {

@@ -109,31 +109,30 @@ void Genoma::listar_secuencias () {
         cout << "No hay secuencias cargadas en memoria." << endl;
 
     for (std::list<Secuencia>::iterator ptr = this->secuencias.begin(); ptr != this->secuencias.end(); ptr++) {
-        int cantBases = 0;
+        int cantidad = 0;
         string basesUnicas = ptr->unicos_secuencia(); 
-        cantBases = basesUnicas.size();
+        cantidad = basesUnicas.size();
 
         if (ptr->getCompleta() == true)
-            cout << "Secuencia "<< ptr->getDescripcion_secuencia() << " contiene " << cantBases<< " bases." << endl;
+            cout << "Secuencia " << ptr->getDescripcion_secuencia() << " contiene " << cantidad << " bases." << endl;
         else 
-            cout << "Secuencia "<< ptr->getDescripcion_secuencia()<<" contiene al menos "<< cantBases-1 << " bases." << endl;
+            cout << "Secuencia " << ptr->getDescripcion_secuencia() << " contiene al menos " << cantidad - 1 << " bases." << endl;
     }
 }
 
-void Genoma::histograma (char* descripcion_secuencia) {
+std::vector<string> Genoma::histograma (char* descripcion_secuencia) {
     
     Secuencia secuencia = this->buscarSecuencia(string(descripcion_secuencia));
-        
-    if (secuencia.getDescripcion_secuencia() == "") {
-        cerr << "Secuencia inv" << char (160) << "lida." << endl;
-        return;
-    }
+    
+    std::vector <string> respuesta;
+    if (secuencia.getDescripcion_secuencia() == "")
+        return respuesta;
 
     int base, posicion = 0;
 
     string bases_filtradas = secuencia.unicos_secuencia();
     std::vector <int> frecuencias (bases_filtradas.size(), 0);
-
+    
     string codigo_genetico = secuencia.getCodigo_genetico();
 
     for (int i = 0; i < bases_filtradas.length(); i++) {
@@ -144,19 +143,48 @@ void Genoma::histograma (char* descripcion_secuencia) {
         } while (posicion != -1);
     }
 
-    //for (base = 0; base < secuencia.getCodigo_genetico().size(); base++)
-       
-    // bases_filtradas.find(secuencia.getCodigo_genetico()[base])
-    for (base = 0; base < frecuencias.size(); base++)
-        cout << bases_filtradas[base] << " : " << frecuencias[base] << endl;
+    for (base = 0; base < frecuencias.size(); base++) {
+        respuesta.push_back(string(1, bases_filtradas[base]));
+        respuesta.push_back(to_string(frecuencias[base]));
+    }
+
+    return respuesta;
 }
 
-void Genoma::es_subsecuencia (char* secuencia) {
+std::vector<string> Genoma::histogramaGeneral () {
 
-    if (!(this->secuencias.size())) {
-        cerr << "No hay secuencias cargadas en memoria." << endl;
-        return;
+    string codigo_genetico = "";
+
+    for (std::list<Secuencia>::iterator ptr = secuencias.begin(); ptr != secuencias.end(); ptr++)
+        codigo_genetico += ptr->getCodigo_genetico();
+    
+    std::vector <string> respuesta;
+
+    int base, posicion = 0;
+
+    string bases_filtradas = unicos_secuencia();
+    std::vector <int> frecuencias (bases_filtradas.size(), 0);
+
+    for (int i = 0; i < bases_filtradas.length(); i++) {
+        posicion = -1;
+        do {
+            posicion = codigo_genetico.find(bases_filtradas[i], posicion + 1);
+            if (posicion != -1) frecuencias[i]++;
+        } while (posicion != -1);
     }
+
+    for (base = 0; base < frecuencias.size(); base++) {
+        respuesta.push_back(string(1, bases_filtradas[base]));
+        respuesta.push_back(to_string(frecuencias[base]));
+    }
+
+    return respuesta;
+}
+
+int Genoma::es_subsecuencia (char* secuencia) {
+
+    if (!(this->secuencias.size()))
+        return -1;
 
     string secuencia_buscar = string (secuencia);
     string codigo_genetico;
@@ -170,10 +198,7 @@ void Genoma::es_subsecuencia (char* secuencia) {
         } while (posicion != -1);
     }
 
-    if (coincidencias)
-        cout << "La secuencia dada se repite " << coincidencias << " veces." << endl;
-    else
-        cout << "La secuencia dada no existe." << endl;
+    return coincidencias;
 }
 
 void Genoma::enmascarar (char* secuencia) {
@@ -212,10 +237,11 @@ void Genoma::guardar (char* nombre_archivo) {
     ofstream archivo;
     string nombreArchivo = string (nombre_archivo);
 
-    archivo.open(nombreArchivo.c_str(),ios::out);
+    archivo.open(nombreArchivo.c_str(), ios::out);
 
-    if (archivo.fail()){
+    if (archivo.fail()) {
         cout << "Error guardando en " << nombreArchivo << endl;
+        return;
     }
 
     for (std::list<Secuencia>::iterator ptr = secuencias.begin(); ptr != secuencias.end(); ptr++) {
@@ -234,6 +260,70 @@ void Genoma::guardar (char* nombre_archivo) {
         cout << "Las secuencias han sido guardadas en " << nombreArchivo << endl;
     
     archivo.close();
+}
+
+void Genoma::codificar (char* nombre_archivo) {
+    ofstream archivo (nombre_archivo, ios::binary);
+
+    if (!archivo) {
+        cerr << "No se pueden guardar las secuencias cargadas en " << nombre_archivo << "." << endl;
+        return;
+    }
+
+    int n = unicos_secuencia().length();
+    cout << "n: " << n << endl;
+    vector <string> histograma = histogramaGeneral();
+
+    for (int c = 0; c < histograma.size(); c += 2) {
+        cout << "c: " << histograma[c] << endl;
+        cout << "f: " << histograma[c+1] << endl;
+    }
+    
+    int ns = secuencias.size();
+    cout << "ns: " << ns << endl << endl;
+
+    for (std::list<Secuencia>::iterator ptr = secuencias.begin(); ptr != secuencias.end(); ptr++) {
+        int l = ptr->getDescripcion_secuencia().size();
+        cout << "l: " << l << endl;
+        cout << "s: " << ptr->getDescripcion_secuencia() << endl;
+        int w;
+        cout << "w: " << ptr->getCodigo_genetico().size() << endl;
+        int x = ptr->getJustificacion();
+        cout << "x: " << x << endl;
+        cout << "binarycode." << endl;
+    }
+
+    cout << "Secuencias codificadas y almacenadas en " << nombre_archivo << "." << endl;
+
+    archivo.close();
+}
+
+void Genoma::decodificar (char* nombre_archivo) {
+    ifstream archivo (nombre_archivo, ios::binary);
+
+    if (!archivo) {
+        cerr << "No se pueden cargar las secuencias en " << nombre_archivo << "." << endl;
+        return;
+    }
+
+    cout << "Secuencias decodificadas desde " << nombre_archivo << " y cargadas en memoria." << endl;
+
+    archivo.close();
+}
+
+std::string Genoma::unicos_secuencia() {
+    string secuenciaUnicos;
+    string secuenciaPrincipal = "";
+
+    for (std::list<Secuencia>::iterator ptr = secuencias.begin(); ptr != secuencias.end(); ptr++)
+        secuenciaPrincipal += ptr->getCodigo_genetico();
+    
+
+    for(int i = 0; i < secuenciaPrincipal.size(); i++)
+        if (secuenciaUnicos.find(secuenciaPrincipal[i]) == std::string::npos)
+            secuenciaUnicos.append(std::string(1, secuenciaPrincipal[i]));
+        
+    return secuenciaUnicos;
 }
 
 #endif // __GENOMA__HXX__
