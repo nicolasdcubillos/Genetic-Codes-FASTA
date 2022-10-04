@@ -129,14 +129,24 @@ void Genoma::histograma (char* descripcion_secuencia) {
         return;
     }
 
-    int base_filtrada, frecuencia, base;
+    int base, posicion = 0;
 
     string bases_filtradas = secuencia.unicos_secuencia();
     std::vector <int> frecuencias (bases_filtradas.size(), 0);
-    
-    for (base = 0; base < secuencia.getCodigo_genetico().size(); base++)
-        frecuencias[bases_filtradas.find(secuencia.getCodigo_genetico()[base])]++;
 
+    string codigo_genetico = secuencia.getCodigo_genetico();
+
+    for (int i = 0; i < bases_filtradas.length(); i++) {
+        posicion = -1;
+        do {
+            posicion = codigo_genetico.find(bases_filtradas[i], posicion + 1);
+            if (posicion != -1) frecuencias[i]++;
+        } while (posicion != -1);
+    }
+
+    //for (base = 0; base < secuencia.getCodigo_genetico().size(); base++)
+       
+    // bases_filtradas.find(secuencia.getCodigo_genetico()[base])
     for (base = 0; base < frecuencias.size(); base++)
         cout << bases_filtradas[base] << " : " << frecuencias[base] << endl;
 }
