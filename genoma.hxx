@@ -285,13 +285,6 @@ void Genoma::codificar (char* nombre_archivo) {
     }
 
     this->huffmanTree = new HuffmanTree(priorityQueue);
-
-    while (!priorityQueue.empty()) {
-        cout << *priorityQueue.top() << endl;
-        priorityQueue.pop();
-    }
-
-    cout << endl;
     
     int ns = secuencias.size();
     cout << "ns: " << ns << endl << endl;
@@ -304,6 +297,7 @@ void Genoma::codificar (char* nombre_archivo) {
         cout << "w: " << ptr->getCodigo_genetico().size() << endl;
         int x = ptr->getJustificacion();
         cout << "x: " << x << endl;
+        //string binaryCode = this->huffmanTree->encode(ptr->getCodigo_genetico());
         cout << "binarycode." << endl;
     }
 

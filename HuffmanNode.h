@@ -19,6 +19,9 @@ class HuffmanNode {
         virtual ~HuffmanNode();
         bool esHoja();
         unsigned long getFreq();
+        HuffmanNode* getLeft();
+        HuffmanNode* getRight();
+        char getData();
 
     friend std::ostream& operator << (std::ostream &o, const HuffmanNode &p)
     {

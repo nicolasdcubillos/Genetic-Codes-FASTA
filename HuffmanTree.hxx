@@ -26,4 +26,25 @@ HuffmanTree::HuffmanTree(std::priority_queue < HuffmanNode*, vector < HuffmanNod
     this->root = result;
 }
 
+string HuffmanTree::encode(string codigo_genetico) {
+
+}
+
+string HuffmanTree::decode(string bits) {
+    string result = "";
+    HuffmanNode* ptr = this->root;
+    for (int i = 0; i < bits.size(); i++) {
+        bool bit = (bits[i] == '1');
+
+        if (bit) ptr = ptr->getRight();
+        else ptr = ptr->getLeft();
+
+        if (ptr->esHoja()) {
+            result += ptr->getData();
+            ptr = this->root;
+        }
+    }
+    return result;
+}
+
 #endif

@@ -14,6 +14,8 @@ class HuffmanTree {
     public:
         HuffmanTree();
         HuffmanTree(std::priority_queue < HuffmanNode*, vector < HuffmanNode* >, HuffmanNode >);
+        string encode(string);
+        string decode(string);
         virtual ~HuffmanTree(); 
 
 };

@@ -30,6 +30,18 @@ unsigned long HuffmanNode::getFreq( ) {
     return this->freq;
 }
 
+char HuffmanNode::getData( ) {
+    return this->data;
+}
+
+HuffmanNode* HuffmanNode::getRight( ) {
+    return this->right;
+}
+
+HuffmanNode* HuffmanNode::getLeft( ) {
+    return this->left;
+}
+
 bool HuffmanNode::esHoja( ) {
     return this->left == NULL && this->right == NULL;
 }
