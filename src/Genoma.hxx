@@ -265,45 +265,55 @@ void Genoma::guardar (char* nombre_archivo) {
 }
 
 void Genoma::codificar (char* nombre_archivo) {
-    ofstream archivo (nombre_archivo, ios::binary);
+    ofstream file (nombre_archivo, ios::binary);
 
-    if (!archivo) {
+    if (!file) {
         cerr << "No se pueden guardar las secuencias cargadas en " << nombre_archivo << "." << endl;
         return;
     }
 
-    int n = unicos_secuencia().length();
-    cout << "n: " << n << endl;
+    short n = unicos_secuencia().length();
+    file.write((char *) & n, sizeof ( n ));
 
     vector < string > histograma = histogramaGeneral();
 
     std::priority_queue < HuffmanNode*, vector < HuffmanNode* >, HuffmanNode > priorityQueue;
     
     for (int c = 0; c < histograma.size(); c += 2) {
-        HuffmanNode* node = new HuffmanNode(histograma [c][0], stoul(histograma [c + 1], 0, 10));
+        char data = histograma [c][0];
+        unsigned long long freq = stoull(histograma [c + 1], 0, 10);
+        HuffmanNode* node = new HuffmanNode(data, freq);
+        file.write((char *) & data, sizeof ( data ));
+        file.write((char *) & freq, sizeof ( freq ));        
         priorityQueue.push(node);
     }
 
     this->huffmanTree = new HuffmanTree(priorityQueue);
     
     int ns = secuencias.size();
-    cout << "ns: " << ns << endl << endl;
+    file.write((char *) & ns, sizeof ( ns ));
+    //cout << "ns: " << ns << endl << endl;
 
     for (std::list<Secuencia>::iterator ptr = secuencias.begin(); ptr != secuencias.end(); ptr++) {
-        int l = ptr->getDescripcion_secuencia().size();
-        cout << "l: " << l << endl;
-        cout << "s: " << ptr->getDescripcion_secuencia() << endl;
-        int w;
-        cout << "w: " << ptr->getCodigo_genetico().size() << endl;
-        int x = ptr->getJustificacion();
-        cout << "x: " << x << endl;
+        short l = ptr->getDescripcion_secuencia().size();
+        file.write((char *) & l, sizeof ( l ));
+        string description = ptr->getDescripcion_secuencia();
+        file.write((char *) & description, sizeof ( description ));
+        //cout << "l: " << l << endl;
+        //cout << "s: " << ptr->getDescripcion_secuencia() << endl;
+        unsigned long long w = ptr->getCodigo_genetico().size();
+        //cout << "w: " << ptr->getCodigo_genetico().size() << endl;
+        file.write((char *) & w, sizeof ( w ));
+        short x = ptr->getJustificacion();
+        file.write((char *) & x, sizeof ( x ));
+        //cout << "x: " << x << endl;
         //string binaryCode = this->huffmanTree->encode(ptr->getCodigo_genetico());
-        cout << "binarycode." << endl;
+        //cout << "binarycode." << endl;
     }
 
     cout << "Secuencias codificadas y almacenadas en " << nombre_archivo << "." << endl;
 
-    archivo.close();
+    file.close();
 }
 
 void Genoma::decodificar (char* nombre_archivo) {

@@ -1,17 +1,17 @@
 # Genetic-Codes-FASTA
 
-Procesador de códigos genéticos en archivos FASTA (.fa) haciendo uso de diferentes Estructuras de Datos.
+FASTA (.fa) file processor developed in C++11. Data structures project.
 
 ## Compilación
 
 ```bash
-g++ -std=c++11 -o main main.cxx
+g++ -std=c++11 -o genome src/main.cxx
 ```
 
 ## Ejecución
 
 ```bash
-./main
+./genome
 ```
 
 ## Licencia

@@ -15,7 +15,7 @@ HuffmanNode::HuffmanNode(unsigned long freq, HuffmanNode* left, HuffmanNode* rig
     this->right = right;
 }
 
-HuffmanNode::HuffmanNode(char data, unsigned long freq) {
+HuffmanNode::HuffmanNode(char data, unsigned long long freq) {
     this->data = data;
     this->freq = freq;
     this->left = NULL;
@@ -26,7 +26,7 @@ HuffmanNode::~HuffmanNode( ) {
 
 }
 
-unsigned long HuffmanNode::getFreq( ) {
+unsigned long long HuffmanNode::getFreq( ) {
     return this->freq;
 }
 

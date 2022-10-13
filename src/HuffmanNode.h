@@ -8,17 +8,17 @@
 class HuffmanNode {
     private:
         char data;
-        unsigned int freq;
+        unsigned long long freq;
         HuffmanNode* left;
         HuffmanNode* right;
 
     public:
         HuffmanNode();
         HuffmanNode(unsigned long, HuffmanNode*, HuffmanNode*);
-        HuffmanNode(char, unsigned long);
+        HuffmanNode(char, unsigned long long);
         virtual ~HuffmanNode();
         bool esHoja();
-        unsigned long getFreq();
+        unsigned long long getFreq();
         HuffmanNode* getLeft();
         HuffmanNode* getRight();
         char getData();
