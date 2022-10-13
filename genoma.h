@@ -5,10 +5,12 @@
 #include <list>
 #include <vector>
 #include "secuencia.h"
+#include "huffmanTree.h"
 
 class Genoma {
     private:
-        std::list<Secuencia> secuencias;
+        std::list < Secuencia > secuencias;
+        HuffmanTree* huffmanTree;
 
     public:
         Genoma();

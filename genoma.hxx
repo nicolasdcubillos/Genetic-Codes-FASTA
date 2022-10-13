@@ -5,14 +5,16 @@
 #include <list>
 #include <iterator>
 #include <vector>
+#include <queue>
+#include <cstdlib>
 
 using namespace std;
 
-Genoma::Genoma( ){
-
+Genoma::Genoma( ) {
+    this->huffmanTree = new HuffmanTree( );
 }
 
-Genoma::~Genoma( ){
+Genoma::~Genoma( ) {
 
 }
 
@@ -73,15 +75,15 @@ void Genoma::cargar (char* nombre_archivo) {
                 secuencia.setCompleta(false);
         }
     }
-
-    if (!indice || secuencias.empty()) {
-        cerr << nombre_archivo << " no contiene ninguna secuencia." << endl;
-        return;
-    }
         
     secuencia.setCodigo_genetico(codigo_genetico);
     secuencias.push_back(secuencia);
     this->setSecuencias(secuencias);
+
+    if (secuencias.empty()) {
+        cerr << nombre_archivo << " no contiene ninguna secuencia." << endl;
+        return;
+    }
 
     if (secuencias.size() == 1)
         cout << "1 secuencia cargada";
@@ -248,15 +250,15 @@ void Genoma::guardar (char* nombre_archivo) {
         archivo << ">" << ptr->getDescripcion_secuencia();
         string codigoGenetico = ptr->getCodigo_genetico();
 
-        for(int i = 0; i < codigoGenetico.size(); i++){
-            if(!(i % ptr-> getJustificacion()))
+        for (int i = 0; i < codigoGenetico.size(); i++) {
+            if (!(i % ptr-> getJustificacion()))
                 archivo << endl;
             archivo << codigoGenetico[i];
         }
         archivo << endl;
     }
 
-    if(!archivo.fail())
+    if (!archivo.fail())
         cout << "Las secuencias han sido guardadas en " << nombreArchivo << endl;
     
     archivo.close();
@@ -272,12 +274,24 @@ void Genoma::codificar (char* nombre_archivo) {
 
     int n = unicos_secuencia().length();
     cout << "n: " << n << endl;
-    vector <string> histograma = histogramaGeneral();
 
+    vector < string > histograma = histogramaGeneral();
+
+    std::priority_queue < HuffmanNode*, vector < HuffmanNode* >, HuffmanNode > priorityQueue;
+    
     for (int c = 0; c < histograma.size(); c += 2) {
-        cout << "c: " << histograma[c] << endl;
-        cout << "f: " << histograma[c+1] << endl;
+        HuffmanNode* node = new HuffmanNode(histograma [c][0], stoul(histograma [c + 1], 0, 10));
+        priorityQueue.push(node);
     }
+
+    this->huffmanTree = new HuffmanTree(priorityQueue);
+
+    while (!priorityQueue.empty()) {
+        cout << *priorityQueue.top() << endl;
+        priorityQueue.pop();
+    }
+
+    cout << endl;
     
     int ns = secuencias.size();
     cout << "ns: " << ns << endl << endl;
@@ -319,10 +333,10 @@ std::string Genoma::unicos_secuencia() {
         secuenciaPrincipal += ptr->getCodigo_genetico();
     
 
-    for(int i = 0; i < secuenciaPrincipal.size(); i++)
+    for (int i = 0; i < secuenciaPrincipal.size(); i++)
         if (secuenciaUnicos.find(secuenciaPrincipal[i]) == std::string::npos)
             secuenciaUnicos.append(std::string(1, secuenciaPrincipal[i]));
-        
+    
     return secuenciaUnicos;
 }
 
