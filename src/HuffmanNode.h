@@ -13,15 +13,16 @@ class HuffmanNode {
         HuffmanNode* right;
 
     public:
-        HuffmanNode();
+        HuffmanNode( );
         HuffmanNode(unsigned long, HuffmanNode*, HuffmanNode*);
         HuffmanNode(char, unsigned long long);
-        virtual ~HuffmanNode();
-        bool esHoja();
-        unsigned long long getFreq();
-        HuffmanNode* getLeft();
-        HuffmanNode* getRight();
-        char getData();
+        virtual ~HuffmanNode( );
+        bool isLeaf( );
+        unsigned long long getFreq( );
+        HuffmanNode* getLeft( );
+        HuffmanNode* getRight( );
+        std::string encode(char);
+        char getData( );
 
     friend std::ostream& operator << (std::ostream &o, const HuffmanNode &p)
     {

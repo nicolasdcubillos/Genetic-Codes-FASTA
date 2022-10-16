@@ -5,20 +5,24 @@
 #include <list>
 #include <vector>
 #include <queue>
-#include "huffmanNode.h"
+#include "HuffmanNode.h"
 
 class HuffmanTree {
     private:
         HuffmanNode* root;
+        HuffmanNode* iterator;
 
     public:
         HuffmanTree();
-        HuffmanTree(std::priority_queue < HuffmanNode*, vector < HuffmanNode* >, HuffmanNode >);
-        string encode(string);
-        string decode(string);
+        HuffmanTree(std::priority_queue < HuffmanNode*, std::vector < HuffmanNode* >, HuffmanNode >);
+        std::string encode(std::string);
+        char decode(bool);
+        std::string decode(std::string);
+        HuffmanNode* getRoot();
         virtual ~HuffmanTree(); 
 
 };
 
-#include "huffmantree.hxx"
-#endif // __GENOMA__H__
+#include "HuffmanTree.hxx"
+
+#endif 

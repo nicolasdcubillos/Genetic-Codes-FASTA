@@ -1,6 +1,8 @@
 #ifndef __HUFFMANNODE__HXX__
 #define __HUFFMANNODE__HXX__
 
+#include <string>
+
 HuffmanNode::HuffmanNode( ) {
     this->freq = 0;
     this->data = 0;
@@ -42,8 +44,36 @@ HuffmanNode* HuffmanNode::getLeft( ) {
     return this->left;
 }
 
-bool HuffmanNode::esHoja( ) {
+bool HuffmanNode::isLeaf( ) {
     return this->left == NULL && this->right == NULL;
 }
+
+std::string HuffmanNode::encode( char data ) {
+  
+  std::string binaryEncoded = "";
+  if( this->data != data )
+  {
+    if ( this->left != NULL )
+      binaryEncoded = this->left->encode( data );
+    if ( binaryEncoded == "" ) {
+      if ( this->right != NULL )
+        binaryEncoded = this->right->encode( data );
+      if ( binaryEncoded != "" )
+        binaryEncoded = "1" + binaryEncoded;
+    }
+    else
+      binaryEncoded = "0" + binaryEncoded;
+
+    if ( binaryEncoded != "" ) {
+      if ( binaryEncoded[ binaryEncoded.size( ) - 1 ] == 'X' )
+        binaryEncoded = binaryEncoded.substr( 0, binaryEncoded.size( ) - 1 );
+    }
+  }
+  else
+    binaryEncoded = "X";
+
+  return( binaryEncoded );
+}
+
 
 #endif
