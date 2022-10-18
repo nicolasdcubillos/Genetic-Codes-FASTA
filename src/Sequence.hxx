@@ -6,7 +6,7 @@
 Sequence::Sequence( ) {
     this->description = "";
     this->genetic_code = "";
-    this->complete = false;
+    this->complete = true;
     this->justification = 0;
 }
 

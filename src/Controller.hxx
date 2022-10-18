@@ -62,7 +62,6 @@ void Controller::cargar (char* fileName) {
             }
             sequence = Sequence ( );
             sequence.setDescription(line.substr(1, line.size()));
-            sequence.setComplete(true);
             genetic_code = "";
         } else {
             if (genetic_code == "")
@@ -324,6 +323,7 @@ void Controller::codificar (char* fileName) {
 
 void Controller::decodificar (char* fileName) {
     ifstream file (fileName, ios::binary);
+    std::list < Sequence > sequences;
 
     if (!file) {
         std::cerr << "No se pueden cargar las secuencias en " << fileName << "." << std::endl;
@@ -332,7 +332,7 @@ void Controller::decodificar (char* fileName) {
 
     short n;
     file.read((char *) & n, sizeof ( n ));
-    std::cout << "n: " << n << std::endl;
+
 
     vector < std::string > histogram = histogramaGeneral();
 
@@ -351,7 +351,8 @@ void Controller::decodificar (char* fileName) {
     
     int ns;
     file.read((char *) & ns, sizeof ( ns ));
-    std::cout << "ns: " << ns << std::endl << std::endl;
+
+    Sequence sequence;
 
     for (int i = 0; i < ns; i++) {
         short l;
@@ -360,17 +361,17 @@ void Controller::decodificar (char* fileName) {
         char description [l + 1];
         file.read((char *) & description, l);
 
-        std::cout << "l: " << l << std::endl;
-        std::cout << "s: " << description << std::endl;
+
+        sequence.setDescription(description);
         unsigned long long w;
         
         file.read((char *) & w, sizeof ( w ));
-        std::cout << "w: " << w << std::endl;
+   
         short x;
         
         file.read((char *) & x, sizeof ( x ));
-        std::cout << "x: " << x << std::endl;
-
+ 
+        sequence.setJustification(x);
         string binaryDecoded = "";
         unsigned char byte = 0;
         HuffmanNode* ptr = huffmanTree->getRoot();
@@ -393,10 +394,14 @@ void Controller::decodificar (char* fileName) {
             for (int i = 0; (i < 8) && (binaryDecoded.size() < w); i++) {
                 char result = huffmanTree->decode((byte >> i) & 1);
                 if (result) binaryDecoded += result;
+                if(result == '-') sequence.setComplete(false);
             }
         }
-        std::cout << "BINARIO DECODIFICADO : " << binaryDecoded << std::endl;
+
+        sequence.setGenetic_code(binaryDecoded);
+        sequences.push_back(sequence);
     }
+    this->setSequences(sequences);
 
     std::cout << "Secuencias decodificadas desde " << fileName << " y cargadas en memoria." << std::endl;
 
