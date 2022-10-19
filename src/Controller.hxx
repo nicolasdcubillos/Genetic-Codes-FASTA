@@ -106,14 +106,11 @@ void Controller::listar_secuencias () {
         std::cout << "No hay secuencias cargadas en memoria." << std::endl;
 
     for (std::list<Sequence>::iterator ptr = this->sequences.begin(); ptr != this->sequences.end(); ptr++) {
-        int cantidad = 0;
-        string basesUnicas = ptr->differentBases(); 
-        cantidad = basesUnicas.size();
+        string differentBases = ptr->differentBases(); 
 
-        if (ptr->getComplete() == true)
-            std::cout << "Secuencia " << ptr->getDescription() << " contiene " << cantidad << " bases." << std::endl;
-        else 
-            std::cout << "Secuencia " << ptr->getDescription() << " contiene al menos " << cantidad - 1 << " bases." << std::endl;
+        std::cout << "Secuencia " << ptr->getDescription() << " contiene ";
+
+        ptr->getComplete() == true ? std::cout << differentBases.size() << " bases." << std::endl : std::cout << "al menos " << (differentBases.size() - 1) << " bases." << std::endl;
     }
 }
 
@@ -333,7 +330,6 @@ void Controller::decodificar (char* fileName) {
     short n;
     file.read((char *) & n, sizeof ( n ));
 
-
     vector < std::string > histogram = histogramaGeneral();
 
     std::priority_queue < HuffmanNode*, vector < HuffmanNode* >, HuffmanNode > priorityQueue;
@@ -352,26 +348,25 @@ void Controller::decodificar (char* fileName) {
     int ns;
     file.read((char *) & ns, sizeof ( ns ));
 
-    Sequence sequence;
-
+    
     for (int i = 0; i < ns; i++) {
+        Sequence sequence;
+        
         short l;
         file.read((char *) & l, sizeof ( l ));
         
         char description [l + 1];
+        memset(description, 0, l + 1);
         file.read((char *) & description, l);
-
-
         sequence.setDescription(description);
+
         unsigned long long w;
-        
         file.read((char *) & w, sizeof ( w ));
    
         short x;
-        
         file.read((char *) & x, sizeof ( x ));
- 
         sequence.setJustification(x);
+
         string binaryDecoded = "";
         unsigned char byte = 0;
         HuffmanNode* ptr = huffmanTree->getRoot();
@@ -394,13 +389,14 @@ void Controller::decodificar (char* fileName) {
             for (int i = 0; (i < 8) && (binaryDecoded.size() < w); i++) {
                 char result = huffmanTree->decode((byte >> i) & 1);
                 if (result) binaryDecoded += result;
-                if(result == '-') sequence.setComplete(false);
+                if (result == '-') sequence.setComplete(false);
             }
         }
 
         sequence.setGenetic_code(binaryDecoded);
         sequences.push_back(sequence);
     }
+
     this->setSequences(sequences);
 
     std::cout << "Secuencias decodificadas desde " << fileName << " y cargadas en memoria." << std::endl;
@@ -415,7 +411,6 @@ std::string Controller::differentBases() {
     for (std::list<Sequence>::iterator ptr = sequences.begin(); ptr != sequences.end(); ptr++)
         buffer += ptr->getGenetic_code();
     
-
     for (char data : buffer)
         if (different.find(data) == std::string::npos)
             different.append(std::string(1, data));
