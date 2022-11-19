@@ -2,6 +2,7 @@
 #define __SEQUENCE__H__
 
 #include <string>
+#include "Graph.h"
 
 class Sequence {
     private:
@@ -9,22 +10,26 @@ class Sequence {
         bool complete;
         unsigned short justification;
         std::string genetic_code;
+        Graph < char, float > * graph;
 
     public:
-        Sequence();
-        virtual ~Sequence(); 
+        Sequence( );
+        virtual ~Sequence( ); 
         
-        std::string getDescription();
-        void setDescription(std::string);
+        std::string getDescription( );
+        void setDescription( std::string );
 
         bool getComplete( );
-        void setComplete(bool);
+        void setComplete( bool );
 
         unsigned short getJustification( );
-        void setJustification(unsigned short);
+        void setJustification( unsigned short );
 
         std::string getGenetic_code( );
-        void setGenetic_code(std::string);
+        void setGenetic_code( std::string );
+
+        Graph < char, float > * getGraph( );
+        void setGraph( Graph < char, float > * );
 
         std::string differentBases( );
 };

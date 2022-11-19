@@ -17,15 +17,15 @@ Controller::~Controller( ) {
 
 }
 
-void Controller::setSequences(std::list<Sequence> sequences){
+void Controller::setSequences( std::list<Sequence> sequences ) {
     this->sequences = sequences;
 }
 
-std::list<Sequence> Controller::getSequences(){
+std::list<Sequence> Controller::getSequences( ){
     return this->sequences;
 }
 
-Sequence Controller::findSequence (std::string description) {
+Sequence Controller::findSequence( std::string description ) {
     Sequence sequence;
 
     for (std::list<Sequence>::iterator ptr = this->sequences.begin(); ptr != this->sequences.end(); ptr++) 
@@ -35,7 +35,7 @@ Sequence Controller::findSequence (std::string description) {
     return sequence;
 }
 
-void Controller::cargar (char* fileName) {
+void Controller::cargar( char* fileName ) {
     ifstream file; 
     file.open(fileName);
     string line, genetic_code;
@@ -52,28 +52,47 @@ void Controller::cargar (char* fileName) {
     }
 
     Sequence sequence;
-    int indice = 0;
+    int indice = 0, row = 0;
+    unsigned short justification;
+    Graph < char, float > * graph;
 
     while (getline(file, line)) {
         if (line[0] == '>') {
             if (indice++)  { 
+                sequence.setGraph(graph);
                 sequence.setGenetic_code(genetic_code);
                 sequences.push_back(sequence);
             }
+            graph = new Graph < char, float > ( );
             sequence = Sequence ( );
             sequence.setDescription(line.substr(1, line.size()));
             genetic_code = "";
+            row = 0;
         } else {
-            if (genetic_code == "")
-                sequence.setJustification(line.size());
+            if (genetic_code == "") {
+                sequence.setJustification(line.size( ));
+                justification = line.size( );
+            }
 
             genetic_code.append(line);
 
+            for (int i = 0; i < line.size( ); i++) {
+                graph->AddVertex(line[i]);
+                
+                if (row) graph->AddEdge(( row * justification ) + i, ( ( row - 1 ) * justification ) + i, 
+                        1 / ( 1 + ( float ) graph->GetVertex(( ( row - 1 ) * justification ) + i) ));
+                
+                if (i) graph->AddEdge(( row * justification ) + i, ( ( row * justification ) + i ) - 1,
+                        1 / ( 1 + ( float ) graph->GetVertex(( ( row * justification ) + i ) - 1) ));
+            }
+
             if (line.find("-") != std::string::npos)
                 sequence.setComplete(false);
+            row++;
         }
     }
-        
+
+    sequence.setGraph(graph);
     sequence.setGenetic_code(genetic_code);
     sequences.push_back(sequence);
     this->setSequences(sequences);
@@ -90,7 +109,7 @@ void Controller::cargar (char* fileName) {
     file.close();
 }
 
-void Controller::conteo () {
+void Controller::conteo( ) {
     if (this->sequences.size() == 1)
         std::cout << "1 sequence";
     else if (this->sequences.size() > 1)
@@ -101,7 +120,7 @@ void Controller::conteo () {
     std::cout << " en memoria." << std::endl;
 }
 
-void Controller::listar_secuencias () {
+void Controller::listar_secuencias( ) {
     if(!sequences.size())
         std::cout << "No hay secuencias cargadas en memoria." << std::endl;
 
@@ -114,11 +133,11 @@ void Controller::listar_secuencias () {
     }
 }
 
-std::vector<string> Controller::histograma (char* description) {
+std::vector< string > Controller::histograma( char* description ) {
     
     Sequence sequence = this->findSequence(string(description));
     
-    std::vector <string> response;
+    std::vector < string > response;
     if (sequence.getDescription() == "")
         return response;
 
@@ -145,7 +164,7 @@ std::vector<string> Controller::histograma (char* description) {
     return response;
 }
 
-std::vector<string> Controller::histogramaGeneral () {
+std::vector<string> Controller::histogramaGeneral( ) {
 
     string genetic_code = "";
 
@@ -175,7 +194,7 @@ std::vector<string> Controller::histogramaGeneral () {
     return response;
 }
 
-int Controller::es_subsecuencia (char* sequence) {
+int Controller::es_subsecuencia( char* sequence ) {
 
     if (!(this->sequences.size()))
         return -1;
@@ -195,7 +214,7 @@ int Controller::es_subsecuencia (char* sequence) {
     return found;
 }
 
-void Controller::enmascarar (char* sequence) {
+void Controller::enmascarar( char* sequence ) {
     
     if (!(this->sequences.size())) {
         std::cerr << "No hay secuencias cargadas en memoria." << std::endl;
@@ -226,7 +245,7 @@ void Controller::enmascarar (char* sequence) {
         std::cout << "La secuencia dada no existe, por tanto no se enmascara nada." << std::endl;
 }
 
-void Controller::guardar (char* fileName) {
+void Controller::guardar( char* fileName ) {
     
     ofstream file;
 
@@ -255,7 +274,7 @@ void Controller::guardar (char* fileName) {
     file.close();
 }
 
-void Controller::codificar (char* fileName) {
+void Controller::codificar( char* fileName ) {
     ofstream file (fileName, ios::binary);
 
     if (!file || !this->sequences.size()) {
@@ -318,7 +337,7 @@ void Controller::codificar (char* fileName) {
     file.close();
 }
 
-void Controller::decodificar (char* fileName) {
+void Controller::decodificar( char* fileName ) {
     ifstream file (fileName, ios::binary);
     std::list < Sequence > sequences;
 
@@ -404,7 +423,7 @@ void Controller::decodificar (char* fileName) {
     file.close();
 }
 
-std::string Controller::differentBases() {
+std::string Controller::differentBases( ) {
     std::string different;
     std::string buffer = "";
 
@@ -416,6 +435,56 @@ std::string Controller::differentBases() {
             different.append(std::string(1, data));
     
     return different;
+}
+
+
+void Controller::ruta_mas_corta( char * params ) {
+    long start, end, i, j, x, y;
+    char* token = strtok (params, " ");
+    Sequence sequence = this->findSequence(string (token));
+    
+    if (sequence.getDescription() == "") {
+        std::cerr << "La secuencia " << token << " no existe." << std::endl;
+        return;
+    }
+
+    token = strtok(NULL, " ");
+    i = atoi(token);
+    
+    token = strtok(NULL, " ");
+    j = atoi(token);
+    
+    token = strtok(NULL, " ");
+    x = atoi(token);
+    
+    token = strtok(NULL, " ");
+    y = atoi(token);
+    
+    start = (i * sequence.getJustification()) + j;
+    end = (x * sequence.getJustification()) + y;
+
+    if (start >= sequence.getGraph( )->getVertices( ).size( )) {
+        std::cerr << "La base en la posici" << char(162) << "n [" << i << ", " << j << "] no existe." << std::endl;
+         return;
+    }
+
+    if (end >= sequence.getGraph( )->getVertices( ).size( )) {
+        std::cerr << "La base en la posici" << char(162) << "n [" << x << ", " << y << "] no existe." << std::endl;
+         return;
+    }
+
+    std::pair < float, std::vector < long > > result = sequence.getGraph()->Dijkstra( start, end );
+    std::cout << "\nPara la secuencia " << params << ", la ruta m" << char(160) << "s corta entre la base en [" << i << "," << j 
+              << "] y la base en [" << x << "," << y << "] es: ";
+
+    for (int i = 0; i < result.second.size( ); i++) {
+        std::cout << sequence.getGraph( )->GetVertex(result.second[i]);
+    }
+    std::cout << "\nEl costo total de la ruta es: " << result.first << std::endl;
+}
+
+void Controller::base_remota( char * ){
+    std::cout << "Base remota";
 }
 
 #endif

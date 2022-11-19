@@ -8,6 +8,7 @@ Sequence::Sequence( ) {
     this->genetic_code = "";
     this->complete = true;
     this->justification = 0;
+    this->graph = new Graph < char, float > ( );
 }
 
 Sequence::~Sequence( ) {
@@ -30,6 +31,10 @@ void Sequence::setGenetic_code(std::string genetic_code){
     this->genetic_code = genetic_code;
 }
 
+void Sequence::setGraph(Graph < char, float > * graph){
+    this->graph = graph;
+}
+
 std::string Sequence::getDescription( ){
     return this->description;
 }
@@ -44,6 +49,10 @@ unsigned short Sequence::getJustification( ){
 
 std::string Sequence::getGenetic_code( ){
     return this->genetic_code;
+}
+
+Graph < char, float >* Sequence::getGraph( ){
+    return this->graph;
 }
 
 std::string Sequence::differentBases(){

@@ -13,26 +13,28 @@ class Controller {
         HuffmanTree* huffmanTree;
 
     public:
-        Controller();
-        virtual ~Controller(); 
+        Controller( );
+        virtual ~Controller( ); 
 
-        void setSequences(std::list<Sequence>);
-        std::list<Sequence> getSequences();
+        void setSequences( std::list< Sequence > );
+        std::list<Sequence> getSequences( );
 
-        // Commands 
+        // Commands
         
-        void cargar(char*);
+        void cargar( char* );
         void conteo( );
-        void listar_secuencias ();
-        std::vector<string> histograma(char*);
-        std::vector<string> histogramaGeneral ();
-        int es_subsecuencia(char*);
-        void enmascarar(char*);
-        void guardar(char*);
-        void codificar(char*);
-        void decodificar(char*);
+        void listar_secuencias( );
+        std::vector < string > histograma( char* );
+        std::vector < string > histogramaGeneral( );
+        int es_subsecuencia( char* );
+        void enmascarar( char* );
+        void guardar( char* );
+        void codificar( char* );
+        void decodificar( char* );
+        void ruta_mas_corta( char* );
+        void base_remota( char* );
 
-        Sequence findSequence(std::string);
+        Sequence findSequence( std::string );
         std::string differentBases();
 };
 

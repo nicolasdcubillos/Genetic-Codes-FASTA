@@ -10,8 +10,8 @@ Interface interface;
 /*
               PONTIFICIA UNIVERSIDAD JAVERIANA
                     ESTRUCTURAS DE DATOS
-                    PROYECTO - ENTREGA 1
-                    30 DE AGOSTO DE 2022
+                    PROYECTO - ENTREGA 3
+                  20 DE NOVIEMEBRE DE 2022
 
     INTEGRANTES:    NICOLÁS DAVID CUBILLOS CUBILLOS
                     ANGELLO MATEO JAIMES RINCÓN

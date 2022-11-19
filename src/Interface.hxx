@@ -11,7 +11,9 @@ Interface::~Interface( ) {
 
 bool Interface::checkParams(char* params, int tam) {
     int i = 0;
-    char* validation = strtok(params, " ");
+    char* validation = new char [strlen(params) + 1];
+    strcpy(validation, params);
+    validation = strtok(validation, " ");
     while (validation != NULL) {
         validation = strtok(NULL, " ");
         i++;
@@ -252,11 +254,15 @@ bool Interface::execute(char* command, char* params) {
     }
 
     if (!strcmp(command, "ruta_mas_corta")) {
-        return checkParams(params, 5);
+        if (!checkParams(params, 5)) return false;
+        controller.ruta_mas_corta(params);
+        return true;
     }
 
     if (!strcmp(command, "base_remota")) {
-        return checkParams(params, 3);
+        if (!checkParams(params, 3)) return false;
+        controller.base_remota(params);
+        return true;
     }
 
     return false;
