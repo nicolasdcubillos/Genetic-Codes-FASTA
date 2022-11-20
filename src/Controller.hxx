@@ -460,8 +460,8 @@ void Controller::ruta_mas_corta( char * params ) {
     token = strtok(NULL, " ");
     y = atoi(token);
     
-    start = (i * sequence.getJustification()) + j;
-    end = (x * sequence.getJustification()) + y;
+    start = (j * sequence.getJustification()) + i;
+    end = (y * sequence.getJustification()) + x;
 
     if (start >= sequence.getGraph( )->getVertices( ).size( )) {
         std::cerr << "La base en la posici" << char(162) << "n [" << i << ", " << j << "] no existe." << std::endl;
@@ -469,22 +469,74 @@ void Controller::ruta_mas_corta( char * params ) {
     }
 
     if (end >= sequence.getGraph( )->getVertices( ).size( )) {
-        std::cerr << "La base en la posici" << char(162) << "n [" << x << ", " << y << "] no existe." << std::endl;
+        std::cerr << "La base en la posici" << char(162) << "n [" << x << "," << y << "] no existe." << std::endl;
          return;
     }
 
-    std::pair < float, std::vector < long > > result = sequence.getGraph()->Dijkstra( start, end );
+    std::pair < float, std::vector < long > > result = sequence.getGraph( )->Dijkstra( start, end );
     std::cout << "\nPara la secuencia " << params << ", la ruta m" << char(160) << "s corta entre la base en [" << i << "," << j 
               << "] y la base en [" << x << "," << y << "] es: ";
 
-    for (int i = 0; i < result.second.size( ); i++) {
+    for (int i = 0; i < result.second.size( ); i++)
         std::cout << sequence.getGraph( )->GetVertex(result.second[i]);
-    }
+    
     std::cout << "\nEl costo total de la ruta es: " << result.first << std::endl;
 }
 
-void Controller::base_remota( char * ){
-    std::cout << "Base remota";
+void Controller::base_remota( char * params ){
+    string params_copy = string( params );
+    long start, i, j, x = 0, y = 0, pos, x_temp, y_temp;
+    float max_distance = 0, distance;
+    char* token = strtok (params, " ");
+    Sequence sequence = this->findSequence(string (token));
+    
+    if (sequence.getDescription() == "") {
+        std::cerr << "La secuencia " << token << " no existe." << std::endl;
+        return;
+    }
+
+    token = strtok(NULL, " ");
+    i = atoi(token);
+    
+    token = strtok(NULL, " ");
+    j = atoi(token);
+    
+    start = (j * sequence.getJustification( )) + i;
+    
+    if (start >= sequence.getGraph( )->getVertices( ).size( )) {
+        std::cerr << "La base en la posici" << char(162) << "n [" << i << "," << j << "] no existe." << std::endl;
+        return;
+    }
+    
+    char find = sequence.getGraph()->GetVertex(start);
+    
+    string genetic_code = sequence.getGenetic_code();
+
+    pos = -1;
+    do {
+        pos = genetic_code.find(find, pos + 1);
+        if (pos != -1) {
+            x_temp = pos % sequence.getJustification( );
+            y_temp = floor(pos / sequence.getJustification( ));
+            distance = ( ( x_temp - i ) * ( x_temp - i ) ) + ( ( y_temp - j ) * ( y_temp - j ) );
+            distance = sqrt(distance);
+            if (distance > max_distance) {
+                max_distance = distance;
+                x = x_temp;
+                y = y_temp;
+            }
+        }
+    } while (pos != -1);
+    
+    std::pair < float, std::vector < long > > result = sequence.getGraph( )->Dijkstra( start, (y * sequence.getJustification( )) + x );
+    std::cout << "\nPara la secuencia " << params << ", la base remota est" << char(160) << " ubicada en [" << x << "," << y << "], "
+              << "y la ruta entre la base en [" << i << "," << j << "] y la base remota en [" << x << "," << y << "] es: ";
+    for (int i = 0; i < result.second.size( ); i++)
+        std::cout << sequence.getGraph( )->GetVertex(result.second[i]);
+    
+    std::cout << "\nEl costo total de la ruta es: " << result.first << std::endl;
+
+    
 }
 
 #endif

@@ -45,6 +45,7 @@ template < class V, class C > std::pair < C, std::vector < long > >
 Graph<V, C>::Dijkstra( long start, long end ) {
   
   std::vector < long > path ( this->vertices.size( ) );
+  
   std::vector < long > shortestPath (0);
 
   typedef std::pair < C, long > pair;
