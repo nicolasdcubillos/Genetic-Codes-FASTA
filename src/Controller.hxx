@@ -80,10 +80,10 @@ void Controller::cargar( char* fileName ) {
                 graph->AddVertex(line[i]);
                 
                 if (row) graph->AddEdge(( row * justification ) + i, ( ( row - 1 ) * justification ) + i, 
-                        1 / ( 1 + ( float ) graph->GetVertex(( ( row - 1 ) * justification ) + i) ));
+                        1 / ( 1 + abs ( line[i] - ( float ) graph->GetVertex(( ( row - 1 ) * justification ) + i) )));
                 
                 if (i) graph->AddEdge(( row * justification ) + i, ( ( row * justification ) + i ) - 1,
-                        1 / ( 1 + ( float ) graph->GetVertex(( ( row * justification ) + i ) - 1) ));
+                        1 / ( 1 + abs ( line[i] - ( float ) graph->GetVertex(( ( row * justification ) + i ) - 1) )));
             }
 
             if (line.find("-") != std::string::npos)
@@ -460,8 +460,8 @@ void Controller::ruta_mas_corta( char * params ) {
     token = strtok(NULL, " ");
     y = atoi(token);
     
-    start = (j * sequence.getJustification()) + i;
-    end = (y * sequence.getJustification()) + x;
+    start = (i * sequence.getJustification()) + j;
+    end = (x * sequence.getJustification()) + y;
 
     if (start >= sequence.getGraph( )->getVertices( ).size( )) {
         std::cerr << "La base en la posici" << char(162) << "n [" << i << ", " << j << "] no existe." << std::endl;
@@ -501,7 +501,7 @@ void Controller::base_remota( char * params ){
     token = strtok(NULL, " ");
     j = atoi(token);
     
-    start = (j * sequence.getJustification( )) + i;
+    start = (i * sequence.getJustification( )) + j;
     
     if (start >= sequence.getGraph( )->getVertices( ).size( )) {
         std::cerr << "La base en la posici" << char(162) << "n [" << i << "," << j << "] no existe." << std::endl;
@@ -518,7 +518,7 @@ void Controller::base_remota( char * params ){
         if (pos != -1) {
             x_temp = pos % sequence.getJustification( );
             y_temp = floor(pos / sequence.getJustification( ));
-            distance = ( ( x_temp - i ) * ( x_temp - i ) ) + ( ( y_temp - j ) * ( y_temp - j ) );
+            distance = ( ( x_temp - j ) * ( x_temp - j ) ) + ( ( y_temp - i ) * ( y_temp - i ) );
             distance = sqrt(distance);
             if (distance > max_distance) {
                 max_distance = distance;

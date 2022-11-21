@@ -44,15 +44,15 @@ Graph<V, C>::getVertices() {
 template < class V, class C > std::pair < C, std::vector < long > >
 Graph<V, C>::Dijkstra( long start, long end ) {
   
-  std::vector < long > path ( this->vertices.size( ) );
+  std::vector < long > path ( this->vertices.size( ), -1);
   
   std::vector < long > shortestPath (0);
 
   typedef std::pair < C, long > pair;
 
   std::vector < bool > visited ( this->vertices.size( ), false );
-  
-  std::vector < bool > inPath ( this->vertices.size( ), false );
+
+  std::vector < C > costs ( this->vertices.size( ), 0);
 
   std::priority_queue < pair > Q; 
 
@@ -70,26 +70,24 @@ Graph<V, C>::Dijkstra( long start, long end ) {
 
     if (v == end) {
       shortestPath.push_back( end );
-      
       while (path[v] != start) {
           shortestPath.push_back( path[v] );
           v = path[v];
       }
-      
       shortestPath.push_back( start );
       std::reverse(shortestPath.begin( ), shortestPath.end( ));
-      
       return {-cost, shortestPath};
-
     }
 
-    if (!visited[v]) { 
+    if (!visited[v]) {
       visited[v] = true;
       for (int i = 0; i < this->vertices[v].getConnections( ).size( ); i++) {
+        long connected = this->vertices[v].getConnections( )[i]->getConnect( );
         Q.push({cost - this->vertices[v].getConnections( )[i]->getCost( ), this->vertices[v].getConnections( )[i]->getConnect( )});
-        if (!inPath [this->vertices[v].getConnections( )[i]->getConnect( )]){
-          path [this->vertices[v].getConnections( )[i]->getConnect( )] = v;
-          inPath [this->vertices[v].getConnections( )[i]->getConnect( )] = true;
+        if (costs[connected] == 0 
+          || costs[connected] < cost - this->vertices[v].getConnections( )[i]->getCost( )) {
+          costs[connected] = cost - this->vertices[v].getConnections( )[i]->getCost( );
+          path[connected] = v;
         }
       }
     }
